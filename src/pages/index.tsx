@@ -1,11 +1,17 @@
-import ApiLoading from '../components/ApiInformation';
+import { GetServerSideProps } from 'next';
+import { ApiInformation } from '../components/ApiInformation';
 import { api } from '../services/api-donation';
 
-export default function Home({ alive }) {
-  return <ApiLoading alive={alive} />;
+type Props = {
+  alive: boolean;
+};
+
+export default function Home({ alive }: Props) {
+  return <ApiInformation alive={alive} />;
 }
 
-export const getServerSideProps = async () => {
-  const { alive } = await api.get('/').then(({ data }) => data);
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { data } = await api.get('/');
+  const { alive } = data;
   return { props: { alive } };
 };

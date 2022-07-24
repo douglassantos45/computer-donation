@@ -1,9 +1,13 @@
 import styles from './styles.module.scss';
 
-export default function ApiLoading(props) {
+type ApiInformationProps = {
+  alive: boolean;
+};
+
+export function ApiInformation({ alive }: ApiInformationProps) {
   return (
     <div className={styles.loading}>
-      {props.alive ? (
+      {alive ? (
         <div>
           <h1>
             <span>200</span> | API Online
