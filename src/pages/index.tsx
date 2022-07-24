@@ -6,6 +6,6 @@ export default function Home({ alive }) {
 }
 
 export const getServerSideProps = async () => {
-  const alive = await api.get('/').then(({ data }) => data.alive);
+  const { alive } = await api.get('/').then(({ data }) => data);
   return { props: { alive } };
 };
