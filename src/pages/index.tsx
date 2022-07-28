@@ -1,17 +1,5 @@
-import { GetServerSideProps } from 'next';
-import { ApiInformation } from '../components/ApiInformation';
-import { api } from '../services/api-donation';
+import Step1 from './forms/step1';
 
-type Props = {
-  alive: boolean;
-};
-
-export default function Home({ alive }: Props) {
-  return <ApiInformation alive={alive} />;
+export default function Home() {
+  return <Step1 />;
 }
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const { data } = await api.get('/');
-  const { alive } = data;
-  return { props: { alive } };
-};
