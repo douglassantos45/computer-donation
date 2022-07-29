@@ -34,3 +34,16 @@ body {
   max-width: 1200px;
   margin: 0 auto;
 }
+
+.input_group {
+  display: flex;
+  justify-content: space-between;
+
+  label:not(:last-child) {
+    margin-right: 8px;
+  }
+
+  .sm {
+    width: 25%;
+  }
+}

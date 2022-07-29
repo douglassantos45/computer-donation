@@ -11,16 +11,15 @@ type StateProps = {
   name: string;
   email: string;
   phone: string;
-  cep: string;
-  district: string;
-  uf: string;
+  zip: string;
   city: string;
-  number: string;
-  street: string;
-  amount: number;
-  description: string;
-  type: string;
   state: string;
+  streetAddress: string;
+  number: string;
+  complement: string;
+  neighborhood: string;
+  deviceCount: number;
+  devices: [{ type: string; condition: string }];
 };
 
 type ActionProps = {
@@ -35,19 +34,18 @@ type ContextProps = {
 
 const initialData: StateProps = {
   currentStep: 0,
-  name: '',
-  email: '',
-  phone: '',
-  cep: '',
-  district: '',
-  uf: '',
-  city: '',
-  number: '',
-  street: '',
-  amount: 0,
-  description: '',
-  type: '',
-  state: '',
+  name: 'TestNome',
+  email: 'test@gmail.com',
+  phone: '5574533323',
+  zip: '3223442',
+  city: 'cidade',
+  state: 'BA',
+  streetAddress: 'Rua',
+  number: '22',
+  complement: 'Comple',
+  neighborhood: 'Baile novo',
+  deviceCount: 1,
+  devices: [{ type: 'notebook', condition: 'working' }],
 };
 
 //Context
@@ -59,16 +57,15 @@ export enum FormAction {
   setName,
   setEmail,
   setPhone,
-  setCep,
-  setDistrict,
-  setUF,
-  setNumber,
+  setZip,
   setCity,
-  setStreet,
-  setAmount,
-  setDescription,
-  setType,
   setState,
+  setStreet,
+  setNumber,
+  setComplement,
+  setNeighborhood,
+  setDeviceCount,
+  setDevices,
 }
 //Recebe dados e ações
 const formReducer = (state: StateProps, action: ActionProps) => {
@@ -82,26 +79,27 @@ const formReducer = (state: StateProps, action: ActionProps) => {
       return { ...state, email: action.payload };
     case FormAction.setPhone:
       return { ...state, phone: action.payload };
-    case FormAction.setCep:
-      return { ...state, cep: action.payload };
-    case FormAction.setAmount:
-      return { ...state, amount: action.payload };
-    case FormAction.setDescription:
-      return { ...state, description: action.payload };
-    case FormAction.setType:
-      return { ...state, type: action.payload };
-    case FormAction.setState:
-      return { ...state, state: action.payload };
+
+    case FormAction.setZip:
+      return { ...state, zip: action.payload };
     case FormAction.setCity:
       return { ...state, city: action.payload };
-    case FormAction.setDistrict:
-      return { ...state, district: action.payload };
-    case FormAction.setUF:
-      return { ...state, uf: action.payload };
+    case FormAction.setState:
+      return { ...state, state: action.payload };
+    case FormAction.setStreet:
+      return { ...state, streetAddress: action.payload };
     case FormAction.setNumber:
       return { ...state, number: action.payload };
-    case FormAction.setStreet:
-      return { ...state, street: action.payload };
+    case FormAction.setComplement:
+      return { ...state, complement: action.payload };
+    case FormAction.setNeighborhood:
+      return { ...state, neighborhood: action.payload };
+
+    case FormAction.setDeviceCount:
+      return { ...state, deviceCount: parseInt(action.payload) };
+    case FormAction.setDevices:
+      return { ...state, devices: action.payload };
+
     default:
       return state;
   }
