@@ -93,7 +93,7 @@ export default function Step1() {
   function handleNextForm(e) {
     e.preventDefault();
 
-    if (validateEmail(state.email) === false) {
+    if (state.email !== '' && validateEmail(state.email) === false) {
       return toast.error('Email inválido');
     }
 

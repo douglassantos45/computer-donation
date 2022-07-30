@@ -45,10 +45,10 @@ export default function Step2() {
   ];
 
   useEffect(() => {
-    if (validation(state) == false) {
+    /* if (validation(state) == false) {
       history.push('/');
     }
-
+ */
     dispatch({
       type: FormAction.setCurrentStep,
       payload: 2,
@@ -77,17 +77,16 @@ export default function Step2() {
     }
   }, [conditionSelected]);
 
-  function handleSubmit(e: MouseEvent<HTMLElement>) {
+  async function handleSubmit(e: MouseEvent<HTMLElement>) {
     e.preventDefault();
-    setIsCompleted(false);
 
     delete state.currentStep;
 
-    api
+    const completed = await api
       .post('/donation', state)
       .then(res => {
         toast.success(responseMessage[String(res.status)]);
-        setIsCompleted(true);
+        return true;
       })
       .catch(error => {
         if (error.response.data?.error) {
@@ -95,11 +94,15 @@ export default function Step2() {
         } else {
           toast.error(responseMessage['500']);
         }
+
+        return false;
       });
 
-    if (isCompleted == true) {
-      setTimeout(() => window.location.reload(), 4000);
+    if (completed) {
+      return setTimeout(() => window.location.reload(), 3500);
     }
+
+    return;
   }
 
   function handleChangeDevice(e) {
