@@ -165,7 +165,7 @@ export default function Step1() {
             Rua*
             <input
               type="text"
-              placeholder="Digite a rua"
+              placeholder="ex: Rua Boa Vista"
               name="setStreet"
               onChange={handleChange}
               value={state.streetAddress}
@@ -201,7 +201,7 @@ export default function Step1() {
             Cidade*
             <input
               type="text"
-              placeholder="Cidade"
+              placeholder="Digite sua cidade"
               name="setCity"
               onChange={handleChange}
               value={state.city}
@@ -214,7 +214,7 @@ export default function Step1() {
             Complemento
             <input
               type="text"
-              placeholder="Informar o complemento"
+              placeholder="ex: Clube Show"
               name="setComplement"
               onChange={handleChange}
               value={state.complement}
@@ -225,7 +225,7 @@ export default function Step1() {
             Vizinhança*
             <input
               type="text"
-              placeholder="Vizinhança"
+              placeholder="Informe a vizinhança"
               name="setNeighborhood"
               onChange={handleChange}
               value={state.neighborhood}
