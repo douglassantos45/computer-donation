@@ -45,10 +45,10 @@ export default function Step2() {
   ];
 
   useEffect(() => {
-    /* if (validation(state) == false) {
+    if (validation(state) == false) {
       history.push('/');
     }
- */
+
     dispatch({
       type: FormAction.setCurrentStep,
       payload: 2,
