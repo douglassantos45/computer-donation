@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { MouseEvent, useEffect, useState } from 'react';
 import { useForm, FormAction } from '../../../contexts/FormContext';
 import toast from 'react-hot-toast';
@@ -20,6 +21,7 @@ export default function Step2() {
   const [typeSelected, setTypeSelected] = useState('');
   const [conditionSelected, setConditionSelected] = useState('');
   const [isCompleted, setIsCompleted] = useState(false);
+  const history = useRouter();
 
   const equipments = [
     { value: 'notebook', name: 'Notebook' },
@@ -43,9 +45,9 @@ export default function Step2() {
   ];
 
   useEffect(() => {
-    /*    if (validation(state) == false) {
+    if (validation(state) == false) {
       history.push('/');
-    } */
+    }
 
     dispatch({
       type: FormAction.setCurrentStep,
@@ -80,7 +82,7 @@ export default function Step2() {
 
     delete state.currentStep;
 
-    /* api
+    api
       .post('/donation', state)
       .then(res => {
         toast.success(responseMessage[String(res.status)]);
@@ -89,12 +91,17 @@ export default function Step2() {
         console.log(error);
         if (error.response.data?.error) {
           toast.error(error.response.data.errorMessage);
+          setIsCompleted(true);
         } else {
           toast.error(responseMessage['500']);
         }
-      }); */
+      });
 
     state.currentStep = 2;
+
+    if (isCompleted == true) {
+      setTimeout(() => window.location.reload(), 4000);
+    }
   }
 
   function handleChangeDevice(e) {
@@ -114,8 +121,6 @@ export default function Step2() {
     if (deviceList.length <= 0) {
       return toast.error('Selecione os items');
     }
-
-    console.log(deviceList.length, 'test');
 
     const count = deviceList.length - state.deviceCount;
 
