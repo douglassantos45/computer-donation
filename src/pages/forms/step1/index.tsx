@@ -41,7 +41,8 @@ export default function Step1() {
         .replaceAll('(', '')
         .replaceAll(')', '')
         .replaceAll('-', '')
-        .replaceAll('.', '');
+        .replaceAll('.', '')
+        .replaceAll(' ', '');
       dispatch({
         type: FormAction.setPhone,
         payload: phone,
