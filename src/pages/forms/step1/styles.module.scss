@@ -24,27 +24,40 @@
     margin: 30px 0;
   }
 
-  .form_group {
-    margin-bottom: 30px;
+  .form_group div:last-child {
+    margin-bottom: 25px;
   }
 
   .input_group {
     display: flex;
     justify-content: space-between;
-
-    label:not(:last-child) {
-      margin-right: 8px;
-    }
+    margin-top: 10px;
 
     .sm {
       width: 25%;
     }
+
+    .mb {
+      width: 50%;
+    }
+
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
   }
 
+  label:not(:last-child) {
+    margin-right: 8px;
+  }
+
+  span {
+    font-weight: 400;
+  }
 
   label {
     font-size: 13px;
     width: 100%;
+    font-weight: 500;
 
     select {
       display: block;
@@ -72,6 +85,14 @@
       font-size: 15px;
 
       background-color: #fff;
+    }
+
+    .validMail {
+      color: #25cd89;
+    }
+
+    .notValidMail {
+      color: red;
     }
   }
 

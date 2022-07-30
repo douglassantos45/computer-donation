@@ -6,12 +6,20 @@ import { api } from '../../../services/api-donation';
 
 import styles from './styles.module.scss';
 import { responseMessage } from '../../../utils/Messages';
+import validation from '../../../utils/Validation';
 
 export default function Step2() {
   const { state, dispatch } = useForm();
-  const device = [];
-  const condition = [];
-  const devices = [];
+
+  const [devices, setDevices] = useState([
+    {
+      type: '',
+      condition: '',
+    },
+  ]);
+  const [typeSelected, setTypeSelected] = useState('');
+  const [conditionSelected, setConditionSelected] = useState('');
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const equipments = [
     { value: 'notebook', name: 'Notebook' },
@@ -35,30 +43,44 @@ export default function Step2() {
   ];
 
   useEffect(() => {
+    /*    if (validation(state) == false) {
+      history.push('/');
+    } */
+
     dispatch({
       type: FormAction.setCurrentStep,
       payload: 2,
     });
   }, []);
 
+  useEffect(() => {
+    if (conditionSelected !== '') {
+      setDevices([
+        ...devices,
+        { type: typeSelected, condition: conditionSelected },
+      ]);
+      setTypeSelected('');
+      setConditionSelected('');
+    }
+  }, [typeSelected]);
+
+  useEffect(() => {
+    if (typeSelected !== '') {
+      setDevices([
+        ...devices,
+        { type: typeSelected, condition: conditionSelected },
+      ]);
+      setTypeSelected('');
+      setConditionSelected('');
+    }
+  }, [conditionSelected]);
+
   function handleSubmit(e: MouseEvent<HTMLElement>) {
     e.preventDefault();
 
-    const deviceSelected = {
-      type: 'device',
-      condition: 'condition',
-    };
-
-    devices.push(deviceSelected);
-
-    dispatch({
-      type: FormAction.setDevices,
-      payload: devices,
-    });
-
     delete state.currentStep;
 
-    api
+    /* api
       .post('/donation', state)
       .then(res => {
         toast.success(responseMessage[String(res.status)]);
@@ -66,18 +88,53 @@ export default function Step2() {
       .catch(error => {
         console.log(error);
         if (error.response.data?.error) {
-          return toast.error(error.response.data.errorMessage);
+          toast.error(error.response.data.errorMessage);
+        } else {
+          toast.error(responseMessage['500']);
         }
-        toast.error(responseMessage['500']);
-      });
+      }); */
+
+    state.currentStep = 2;
   }
 
-  function handleChangeSelect(key: string, value: string) {
-    if (key === 'setDevice') {
-      device.push(value);
-    } else if (key === 'setCondition') {
-      condition.push(value);
+  function handleChangeDevice(e) {
+    setTypeSelected(e.target.value);
+  }
+
+  function handleChangeCondition(e) {
+    setConditionSelected(e.target.value);
+  }
+
+  function handleSalveDevices(e) {
+    e.preventDefault();
+    const deviceList = devices.filter(
+      device => device.type && device.condition !== '',
+    );
+
+    if (deviceList.length <= 0) {
+      return toast.error('Selecione os items');
     }
+
+    console.log(deviceList.length, 'test');
+
+    const count = deviceList.length - state.deviceCount;
+
+    if (deviceList.length > state.deviceCount) {
+      deviceList.forEach(_ => {
+        deviceList.shift();
+        console.log(deviceList.length);
+        if (count === deviceList.length) {
+          return;
+        }
+      });
+    }
+
+    dispatch({
+      type: FormAction.setDevices,
+      payload: deviceList,
+    });
+
+    setIsCompleted(!isCompleted);
   }
 
   return (
@@ -85,34 +142,19 @@ export default function Step2() {
       <h1>Segunda Etapa</h1>
       <p>Passo {state.currentStep}/2</p>
 
-      <div className={styles.form_group}>
-        {/* <label htmlFor="devices">
-          <select
-            name="devices"
-            id="devices"
-            onChange={e => handleChangeSelect('setDevice', e.target.value)}
-          >
-            <option>Equipamentos</option>
-            {equipments.map(({ value, name }) => (
-              <option value={value} key={value}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </label> */}
-
+      <form className={styles.form_group}>
         {state.deviceCount > 0 &&
           Array.from({ length: state.deviceCount }, (_, key) => (
             <div className={styles.input_group} key={key}>
               <label htmlFor="devices">
+                Equipamento* ({key + 1})
                 <select
-                  name="devices"
+                  name="type"
                   id="devices"
-                  onChange={e =>
-                    handleChangeSelect('setDevice', e.target.value)
-                  }
+                  onChange={e => handleChangeDevice(e)}
                 >
-                  <option>Selecione</option>
+                  <option>Selecione os equipamento(s)*</option>
+
                   {equipments.map(({ value, name }) => (
                     <option value={value} key={value}>
                       {name}
@@ -122,14 +164,13 @@ export default function Step2() {
               </label>
 
               <label htmlFor="condition">
+                Selecione a condição* ({key + 1})
                 <select
                   name="condition"
                   id="condition"
-                  onChange={e =>
-                    handleChangeSelect('setCondition', e.target.value)
-                  }
+                  onChange={e => handleChangeCondition(e)}
                 >
-                  <option>Condição</option>
+                  <option>Selecione a condição*</option>
                   {states.map(({ value, name }) => (
                     <option value={value} key={value}>
                       {name}
@@ -139,13 +180,21 @@ export default function Step2() {
               </label>
             </div>
           ))}
-      </div>
+        <br />
+        <button onClick={e => handleSalveDevices(e)} disabled={isCompleted}>
+          Salvar
+        </button>
+      </form>
 
       <div className={styles.btn_group}>
         <div className={styles.prev}>
           <Link href="/">Voltar</Link>
         </div>
-        <button className={styles.submit} type="submit" onClick={handleSubmit}>
+        <button
+          className={styles.submit}
+          onClick={handleSubmit}
+          disabled={!isCompleted}
+        >
           Concluir
         </button>
       </div>

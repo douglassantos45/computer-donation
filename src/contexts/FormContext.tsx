@@ -34,18 +34,18 @@ type ContextProps = {
 
 const initialData: StateProps = {
   currentStep: 0,
-  name: 'TestNome',
-  email: 'test@gmail.com',
-  phone: '5574533323',
-  zip: '3223442',
-  city: 'cidade',
-  state: 'BA',
-  streetAddress: 'Rua',
-  number: '22',
-  complement: 'Comple',
-  neighborhood: 'Baile novo',
+  name: '',
+  email: '',
+  phone: '',
+  zip: '',
+  city: '',
+  state: '',
+  streetAddress: '',
+  number: '',
+  complement: '',
+  neighborhood: '',
   deviceCount: 1,
-  devices: [{ type: 'notebook', condition: 'working' }],
+  devices: [{ type: '', condition: '' }],
 };
 
 //Context
@@ -66,6 +66,7 @@ export enum FormAction {
   setNeighborhood,
   setDeviceCount,
   setDevices,
+  setCondition,
 }
 //Recebe dados e ações
 const formReducer = (state: StateProps, action: ActionProps) => {
@@ -99,6 +100,9 @@ const formReducer = (state: StateProps, action: ActionProps) => {
       return { ...state, deviceCount: parseInt(action.payload) };
     case FormAction.setDevices:
       return { ...state, devices: action.payload };
+
+    case FormAction.setCondition:
+      return { ...state, devices: { conditon: action.payload } };
 
     default:
       return state;

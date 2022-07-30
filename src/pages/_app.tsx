@@ -7,7 +7,6 @@ function MyApp({ Component, pageProps }) {
     <FormProvider>
       <div className="container">
         <Toaster />
-        <header>Test</header>
         <Component {...pageProps} />
       </div>
     </FormProvider>

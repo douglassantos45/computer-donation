@@ -1,9 +1,10 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-
+import toast from 'react-hot-toast';
 import { useForm, FormAction } from '../../../contexts/FormContext';
 import { api } from '../../../services/api-cep';
+import validation from '../../../utils/Validation';
+import validator from 'validator';
 
 import styles from './styles.module.scss';
 
@@ -12,15 +13,7 @@ export default function Step1() {
   const loading = useRef(null);
   const numero = useRef(null);
   const history = useRouter();
-
-  const devices = [
-    { value: 'notebook', name: 'Notebook' },
-    { value: 'desktop', name: 'Desktop' },
-    { value: 'netBook', name: 'NetBook' },
-    { value: 'screen', name: 'Monitor' },
-    { value: 'printer', name: 'Impressora' },
-    { value: 'scanner', name: 'Scanner' },
-  ];
+  const [emailError, setEmailError] = useState('');
 
   useEffect(() => {
     dispatch({
@@ -29,8 +22,33 @@ export default function Step1() {
     });
   }, []);
 
+  const validateEmail = email => {
+    if (!validator.isEmail(email)) {
+      setEmailError('Digite um email válido!');
+      return false;
+    }
+    setEmailError('Email válido!');
+    return true;
+  };
+
   //Capturando dados do inputs
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    if (e.target.name == 'setEmail') {
+      validateEmail(e.target.value);
+    }
+    if (e.target.name == 'setPhone') {
+      const phone = e.target.value
+        .replaceAll('(', '')
+        .replaceAll(')', '')
+        .replaceAll('-', '')
+        .replaceAll('.', '');
+      dispatch({
+        type: FormAction.setPhone,
+        payload: phone,
+      });
+      return;
+    }
+
     dispatch({
       type: FormAction[e.target.name],
       payload: e.target.value,
@@ -74,148 +92,156 @@ export default function Step1() {
 
   function handleNextForm(e) {
     e.preventDefault();
-    history.push('/forms/step2');
-  }
 
-  function handleChangeSelect(value: string) {}
+    if (validateEmail(state.email) === false) {
+      return toast.error('Email inválido');
+    }
+
+    if (validation(state) !== false) {
+      return history.push('/forms/step2');
+    }
+
+    toast.error('Alguns campos não foram digitados');
+  }
 
   return (
     <div className={styles.container}>
       <h1>Primeira Etapa</h1>
       <p>Passo {state.currentStep}/2</p>
 
-      <form>
-        <div className={styles.form_group}>
+      <form className={styles.form_group}>
+        <div className={styles.input_group}>
           <label htmlFor="">
+            Nome completo*
             <input
               type="text"
-              placeholder="name"
+              placeholder="Digite seu nome"
               name="setName"
               onChange={handleChange}
               value={state.name}
-              required
+            />
+          </label>
+        </div>
+
+        <div className={styles.input_group}>
+          <label htmlFor="">
+            E-mail
+            <input
+              type="email"
+              placeholder="ex: email@gmail.com"
+              name="setEmail"
+              onChange={handleChange}
+              value={state.email}
+            />
+            <span>{emailError}</span>
+          </label>
+          <label htmlFor="">
+            Telefone*
+            <input
+              type="text"
+              placeholder="ex: 55749003452"
+              name="setPhone"
+              onChange={handleChange}
+              value={state.phone}
+            />
+          </label>
+        </div>
+
+        <div className={styles.input_group}>
+          <label htmlFor="">
+            Cep*
+            <input
+              type="text"
+              placeholder="ex: 44790000"
+              name="setZip"
+              onChange={handleChange}
+              value={state.zip}
+              onBlur={checkCep}
             />
           </label>
 
-          <div className={styles.input_group}>
-            <label htmlFor="">
-              <input
-                type="email"
-                placeholder="Email"
-                name="setEmail"
-                onChange={handleChange}
-                value={state.email}
-                required
-              />
-            </label>
+          <label htmlFor="">
+            Rua*
+            <input
+              type="text"
+              placeholder="Digite a rua"
+              name="setStreet"
+              onChange={handleChange}
+              value={state.streetAddress}
+            />
+          </label>
 
-            <label htmlFor="">
-              <input
-                type="text"
-                placeholder="Phone"
-                name="setPhone"
-                onChange={handleChange}
-                value={state.phone}
-                required
-              />
-            </label>
-          </div>
-
-          <div className={styles.input_group}>
-            <label htmlFor="">
-              <input
-                type="text"
-                placeholder="Cep"
-                name="setZip"
-                onChange={handleChange}
-                value={state.zip}
-                required
-                onBlur={checkCep}
-              />
-            </label>
-
-            <label htmlFor="">
-              <input
-                type="text"
-                placeholder="Rua"
-                name="setStreet"
-                onChange={handleChange}
-                value={state.streetAddress}
-                required
-              />
-            </label>
-
-            <label htmlFor="" className={styles.sm}>
-              <input
-                type="text"
-                placeholder="UF"
-                name="setState"
-                onChange={handleChange}
-                value={state.state}
-                required
-              />
-            </label>
-          </div>
-
-          <div className={styles.input_group}>
-            <label htmlFor="" className={styles.sm}>
-              <input
-                type="text"
-                placeholder="Number"
-                name="setNumber"
-                onChange={handleChange}
-                value={state.number}
-                required
-                ref={numero}
-              />
-            </label>
-
-            <label htmlFor="">
-              <input
-                type="text"
-                placeholder="Cidade"
-                name="setCity"
-                onChange={handleChange}
-                value={state.city}
-                required
-              />
-            </label>
-          </div>
-
-          <div className={styles.input_group}>
-            <label htmlFor="">
-              <input
-                type="text"
-                placeholder="Complemento"
-                name="setComplement"
-                onChange={handleChange}
-                value={state.complement}
-                required
-              />
-            </label>
-
-            <label htmlFor="">
-              <input
-                type="text"
-                placeholder="Vizinhança"
-                name="setNeighborhood"
-                onChange={handleChange}
-                value={state.neighborhood}
-                required
-              />
-            </label>
-
-            <label htmlFor="" className={styles.sm}>
-              <input
-                type="Number"
-                name="setDeviceCount"
-                onChange={handleChange}
-                value={state.deviceCount}
-                required
-              />
-            </label>
-          </div>
+          <label htmlFor="" className={styles.sm}>
+            UF*
+            <input
+              type="text"
+              placeholder="UF"
+              name="setState"
+              onChange={handleChange}
+              value={state.state}
+            />
+          </label>
         </div>
+
+        <div className={styles.input_group}>
+          <label htmlFor="" className={styles.sm}>
+            Numero*
+            <input
+              type="text"
+              placeholder="ex: 22"
+              name="setNumber"
+              onChange={handleChange}
+              value={state.number}
+              ref={numero}
+            />
+          </label>
+
+          <label htmlFor="">
+            Cidade*
+            <input
+              type="text"
+              placeholder="Cidade"
+              name="setCity"
+              onChange={handleChange}
+              value={state.city}
+            />
+          </label>
+        </div>
+
+        <div className={styles.input_group}>
+          <label htmlFor="">
+            Complemento
+            <input
+              type="text"
+              placeholder="Informar o complemento"
+              name="setComplement"
+              onChange={handleChange}
+              value={state.complement}
+            />
+          </label>
+
+          <label htmlFor="">
+            Vizinhança*
+            <input
+              type="text"
+              placeholder="Vizinhança"
+              name="setNeighborhood"
+              onChange={handleChange}
+              value={state.neighborhood}
+            />
+          </label>
+
+          <label htmlFor="" className={styles.mb}>
+            Qtde. Doação
+            <input
+              type="Number"
+              name="setDeviceCount"
+              onChange={handleChange}
+              value={state.deviceCount}
+            />
+          </label>
+        </div>
+
         <button onClick={handleNextForm} type="button">
           Continuar
         </button>

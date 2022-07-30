@@ -31,6 +31,7 @@
   .input_group {
     display: flex;
     justify-content: space-between;
+    margin-top: 10px;
 
     label:not(:last-child) {
       margin-right: 8px;
@@ -41,9 +42,9 @@
     }
   }
 
-
   label {
     font-size: 13px;
+    font-weight: 500;
 
     select {
       display: block;
@@ -52,7 +53,7 @@
       padding: 10px 5px;
       border: 2px solid #25cd89;
       border-radius: 10px;
-      color: #b8b8d4;
+      color: #000;
       outline: 0;
       font-size: 15px;
 
@@ -75,6 +76,15 @@
     color: #000
   }
 
+  button {
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: #00b5b9;
+    color: #fff;
+
+    cursor: pointer;
+  }
+
   .submit {
     background-color: #25cd89;
     color: #fff;
@@ -89,6 +99,11 @@
     justify-content: center;
 
     cursor: pointer;
+  }
+
+  button:disabled {
+    background-color: #c1c1c1;
+    cursor: initial;
   }
 }
 
