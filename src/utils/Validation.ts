@@ -5,7 +5,6 @@ export default function validation(data) {
   if (data.city == '') return false;
   if (data.state == '') return false;
   if (data.streetAddress == '') return false;
-  if (data.complement == '') return false;
   if (data.neighborhood == '') return false;
 
   return true;
