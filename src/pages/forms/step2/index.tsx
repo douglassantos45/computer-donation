@@ -79,6 +79,7 @@ export default function Step2() {
 
   function handleSubmit(e: MouseEvent<HTMLElement>) {
     e.preventDefault();
+    setIsCompleted(false);
 
     delete state.currentStep;
 
@@ -86,18 +87,15 @@ export default function Step2() {
       .post('/donation', state)
       .then(res => {
         toast.success(responseMessage[String(res.status)]);
+        setIsCompleted(true);
       })
       .catch(error => {
-        console.log(error);
         if (error.response.data?.error) {
           toast.error(error.response.data.errorMessage);
-          setIsCompleted(true);
         } else {
           toast.error(responseMessage['500']);
         }
       });
-
-    state.currentStep = 2;
 
     if (isCompleted == true) {
       setTimeout(() => window.location.reload(), 4000);
@@ -127,7 +125,6 @@ export default function Step2() {
     if (deviceList.length > state.deviceCount) {
       deviceList.forEach(_ => {
         deviceList.shift();
-        console.log(deviceList.length);
         if (count === deviceList.length) {
           return;
         }
