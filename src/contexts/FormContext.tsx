@@ -66,7 +66,6 @@ export enum FormAction {
   setNeighborhood,
   setDeviceCount,
   setDevices,
-  setCondition,
 }
 //Recebe dados e ações
 const formReducer = (state: StateProps, action: ActionProps) => {
@@ -100,9 +99,6 @@ const formReducer = (state: StateProps, action: ActionProps) => {
       return { ...state, deviceCount: parseInt(action.payload) };
     case FormAction.setDevices:
       return { ...state, devices: action.payload };
-
-    case FormAction.setCondition:
-      return { ...state, devices: { conditon: action.payload } };
 
     default:
       return state;

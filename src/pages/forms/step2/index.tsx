@@ -1,27 +1,22 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { MouseEvent, useEffect, useState } from 'react';
+import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { useForm, FormAction } from '../../../contexts/FormContext';
 import toast from 'react-hot-toast';
-import { api } from '../../../services/api-donation';
+import validation from '../../../utils/Validation';
+import { FaTrash } from 'react-icons/fa';
 
 import styles from './styles.module.scss';
+import { api } from '../../../services/api-donation';
 import { responseMessage } from '../../../utils/Messages';
-import validation from '../../../utils/Validation';
+import { ImSpinner8 } from 'react-icons/im';
 
 export default function Step2() {
-  const { state, dispatch } = useForm();
-
-  const [devices, setDevices] = useState([
-    {
-      type: '',
-      condition: '',
-    },
-  ]);
-  const [typeSelected, setTypeSelected] = useState('');
-  const [conditionSelected, setConditionSelected] = useState('');
-  const [isCompleted, setIsCompleted] = useState(false);
   const history = useRouter();
+  const { state, dispatch } = useForm();
+  const [serviceList, setServiceList] = useState([{ type: '', condition: '' }]);
+  const [renderSelects, setRenderSelects] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const equipments = [
     { value: 'notebook', name: 'Notebook' },
@@ -55,40 +50,41 @@ export default function Step2() {
     });
   }, []);
 
-  useEffect(() => {
-    if (conditionSelected !== '') {
-      setDevices([
-        ...devices,
-        { type: typeSelected, condition: conditionSelected },
-      ]);
-      setTypeSelected('');
-      setConditionSelected('');
-    }
-  }, [typeSelected]);
+  const handleServiceAdd = () => {
+    setRenderSelects(renderSelects + 1);
+    setServiceList([...serviceList, { type: '', condition: '' }]);
+  };
 
-  useEffect(() => {
-    if (typeSelected !== '') {
-      setDevices([
-        ...devices,
-        { type: typeSelected, condition: conditionSelected },
-      ]);
-      setTypeSelected('');
-      setConditionSelected('');
-    }
-  }, [conditionSelected]);
-
-  async function handleSubmit(e: MouseEvent<HTMLElement>) {
+  const handleSalvar = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    handleSubmit(e);
+  };
+
+  const handleSubmit = async (e: MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    state.devices = serviceList;
+    state.deviceCount = renderSelects;
+
+    console.log(state);
 
     delete state.currentStep;
 
     const completed = await api
       .post('/donation', state)
       .then(res => {
+        console.log(res);
         toast.success(responseMessage[String(res.status)]);
         return true;
       })
       .catch(error => {
+        console.log(error);
         if (error.response.data?.error) {
           toast.error(error.response.data.errorMessage);
         } else {
@@ -103,105 +99,95 @@ export default function Step2() {
     }
 
     return;
-  }
+  };
 
-  function handleChangeDevice(e) {
-    setTypeSelected(e.target.value);
-  }
+  const handleServiceRemove = index => {
+    const list = [...serviceList];
+    list.splice(index, 1);
+    setServiceList(list);
 
-  function handleChangeCondition(e) {
-    setConditionSelected(e.target.value);
-  }
+    setRenderSelects(renderSelects - 1);
 
-  function handleSalveDevices(e) {
-    e.preventDefault();
-    const deviceList = devices.filter(
-      device => device.type && device.condition !== '',
-    );
+    console.log(renderSelects);
+  };
 
-    if (deviceList.length <= 0) {
-      return toast.error('Selecione os items');
-    }
+  const handleServiceChange = (e: ChangeEvent<HTMLSelectElement>, index) => {
+    const { name, value } = e.target;
+    const list = [...serviceList];
 
-    const count = deviceList.length - state.deviceCount;
-
-    if (deviceList.length > state.deviceCount) {
-      deviceList.forEach(_ => {
-        deviceList.shift();
-        if (count === deviceList.length) {
-          return;
-        }
-      });
-    }
-
-    dispatch({
-      type: FormAction.setDevices,
-      payload: deviceList,
-    });
-
-    setIsCompleted(!isCompleted);
-  }
+    list[index][name] = value;
+    setServiceList(list);
+  };
 
   return (
     <div className={styles.container}>
       <h1>Segunda Etapa</h1>
       <p>Passo {state.currentStep}/2</p>
+      <form action="" className={styles.form_group}>
+        <div>
+          {renderSelects > 0 &&
+            serviceList.map((service, index) => (
+              <div key={index} className={styles.input_group}>
+                <label htmlFor="type">
+                  Equipamentos
+                  <select
+                    name="type"
+                    value={service.type}
+                    onChange={e => handleServiceChange(e, index)}
+                  >
+                    <option>Selecione...</option>
+                    {equipments.map(({ name, value }) => (
+                      <option value={value} key={value}>
+                        {name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
 
-      <form className={styles.form_group}>
-        {state.deviceCount > 0 &&
-          Array.from({ length: state.deviceCount }, (_, key) => (
-            <div className={styles.input_group} key={key}>
-              <label htmlFor="devices">
-                Equipamento* ({key + 1})
-                <select
-                  name="type"
-                  id="devices"
-                  onChange={e => handleChangeDevice(e)}
-                >
-                  <option>Selecione os equipamento(s)*</option>
-
-                  {equipments.map(({ value, name }) => (
-                    <option value={value} key={value}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <label htmlFor="condition">
-                Selecione a condição* ({key + 1})
-                <select
-                  name="condition"
-                  id="condition"
-                  onChange={e => handleChangeCondition(e)}
-                >
-                  <option>Selecione a condição*</option>
-                  {states.map(({ value, name }) => (
-                    <option value={value} key={value}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-          ))}
+                <label htmlFor="condition">
+                  Condição
+                  <select
+                    name="condition"
+                    value={service.condition}
+                    onChange={e => handleServiceChange(e, index)}
+                  >
+                    <option value="">Selecione</option>
+                    {states.map(({ name, value }) => (
+                      <option value={value} key={value}>
+                        {name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {renderSelects > 1 && (
+                  <div
+                    onClick={handleServiceRemove}
+                    className={styles.remove_select}
+                  >
+                    <FaTrash />
+                  </div>
+                )}
+              </div>
+            ))}
+        </div>
         <br />
-        <button onClick={e => handleSalveDevices(e)} disabled={isCompleted}>
-          Salvar
-        </button>
+        <div className={styles.add_device}>
+          <button onClick={handleServiceAdd} type="button">
+            Adicionar
+          </button>
+          <span className={styles.total_devices}>Total: {renderSelects}</span>
+        </div>
       </form>
 
       <div className={styles.btn_group}>
         <div className={styles.prev}>
           <Link href="/">Voltar</Link>
         </div>
-        <button
-          className={styles.submit}
-          onClick={handleSubmit}
-          disabled={!isCompleted}
-        >
-          Concluir
-        </button>
+        <div>
+          <button className={styles.submit} onClick={handleSalvar}>
+            {loading ? <ImSpinner8 /> : 'Concluir'}
+          </button>
+        </div>
       </div>
     </div>
   );
