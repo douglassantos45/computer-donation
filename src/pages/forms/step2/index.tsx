@@ -69,15 +69,27 @@ export default function Step2() {
   const handleSubmit = async (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
 
-    state.devices = serviceList;
-    state.deviceCount = renderSelects;
+    const response = {
+      name: state.name,
+      email: state.email,
+      phone: state.phone,
+      zip: state.zip,
+      city: state.city,
+      state: state.state,
+      streetAddress: state.streetAddress,
+      number: state.number,
+      complement: state.complement,
+      neighborhood: state.neighborhood,
+      deviceCount: renderSelects,
+      devices: serviceList,
+    };
 
-    console.log(state);
+    console.log(response);
 
     delete state.currentStep;
 
     const completed = await api
-      .post('/donation', state)
+      .post('/donation', response)
       .then(res => {
         console.log(res);
         toast.success(responseMessage[String(res.status)]);
@@ -95,7 +107,7 @@ export default function Step2() {
       });
 
     if (completed) {
-      return setTimeout(() => window.location.reload(), 3500);
+      //return setTimeout(() => window.location.reload(), 3500);
     }
 
     return;
