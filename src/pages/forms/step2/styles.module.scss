@@ -31,6 +31,7 @@
   .input_group {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-top: 10px;
 
     label:not(:last-child) {
@@ -61,6 +62,26 @@
     }
   }
 
+  .remove_select {
+    background-color: #ff335f;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+
+    font-size: 13px;
+
+    cursor: pointer;
+  }
+
+  .add_device {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .btn_group {
     display: flex;
     align-items: center;
@@ -85,6 +106,11 @@
     cursor: pointer;
   }
 
+  .total_devices {
+    margin-left: 10px;
+    font-size: 15px;
+  }
+
   .submit {
     background-color: #25cd89;
     color: #fff;
@@ -99,6 +125,11 @@
     justify-content: center;
 
     cursor: pointer;
+
+    svg {
+      animation: spin 1s ease-in-out infinite;
+      font-size: 20px;
+    }
   }
 
   button:disabled {
@@ -110,4 +141,19 @@
 .loading {
   display: none;
   color: red;
+}
+
+@media (max-width: 420px) {
+  .container {
+    .input_group {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+}
+
+@keyframes spin {
+	100% {
+		transform: rotate(360deg);
+	}
 }

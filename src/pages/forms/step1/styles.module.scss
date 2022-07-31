@@ -133,3 +133,14 @@
     border-radius: 5px;
   }
 }
+
+@media (max-width: 450px) {
+  .container {
+    margin-top: 250px;
+    .input_group {
+      flex-direction: column;
+      align-items: flex-start;
+    
+    }
+  }
+}

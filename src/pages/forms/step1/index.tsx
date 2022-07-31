@@ -230,16 +230,6 @@ export default function Step1() {
               value={state.neighborhood}
             />
           </label>
-
-          <label htmlFor="" className={styles.mb}>
-            Qtde. Doação
-            <input
-              type="Number"
-              name="setDeviceCount"
-              onChange={handleChange}
-              value={state.deviceCount}
-            />
-          </label>
         </div>
 
         <button onClick={handleNextForm} type="button">

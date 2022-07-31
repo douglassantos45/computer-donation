@@ -19,8 +19,6 @@ type StateProps = {
   complement: string;
   neighborhood: string;
   deviceCount: number;
-  type: string;
-  condition: string[];
   devices: [{ type: string; condition: string }];
 };
 
@@ -47,8 +45,6 @@ const initialData: StateProps = {
   complement: '',
   neighborhood: '',
   deviceCount: 1,
-  type: '',
-  condition: [],
   devices: [{ type: '', condition: '' }],
 };
 
@@ -70,7 +66,6 @@ export enum FormAction {
   setNeighborhood,
   setDeviceCount,
   setDevices,
-  setCondition,
 }
 //Recebe dados e ações
 const formReducer = (state: StateProps, action: ActionProps) => {
@@ -103,9 +98,6 @@ const formReducer = (state: StateProps, action: ActionProps) => {
     case FormAction.setDeviceCount:
       return { ...state, deviceCount: parseInt(action.payload) };
     case FormAction.setDevices:
-      return { ...state, devices: action.payload };
-
-    case FormAction.setCondition:
       return { ...state, devices: action.payload };
 
     default:
