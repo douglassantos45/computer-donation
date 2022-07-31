@@ -1,208 +1,69 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { MouseEvent, useEffect, useState } from 'react';
+import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { useForm, FormAction } from '../../../contexts/FormContext';
 import toast from 'react-hot-toast';
-import { api } from '../../../services/api-donation';
 
 import styles from './styles.module.scss';
-import { responseMessage } from '../../../utils/Messages';
-import validation from '../../../utils/Validation';
 
 export default function Step2() {
-  const { state, dispatch } = useForm();
+  const [serviceList, setServiceList] = useState([{ type: '', condition: '' }]);
 
-  const [devices, setDevices] = useState([
-    {
-      type: '',
-      condition: '',
-    },
-  ]);
-  const [typeSelected, setTypeSelected] = useState('');
-  const [conditionSelected, setConditionSelected] = useState('');
-  const [isCompleted, setIsCompleted] = useState(false);
-  const history = useRouter();
-
-  const equipments = [
-    { value: 'notebook', name: 'Notebook' },
-    { value: 'desktop', name: 'Desktop' },
-    { value: 'netBook', name: 'NetBook' },
-    { value: 'screen', name: 'Monitor' },
-    { value: 'printer', name: 'Impressora' },
-    { value: 'scanner', name: 'Scanner' },
-  ];
-
-  const states = [
-    {
-      value: 'working',
-      name: 'Tem todas as partes, liga e funciona normalmente',
-    },
-    { value: 'notWorking', name: 'Tem todas as partes, mas não liga mais' },
-    {
-      value: 'broken',
-      name: ' Faltam peças, funciona só as vezes ou está quebrado',
-    },
-  ];
+  const amount = 2;
 
   useEffect(() => {
-    /* if (validation(state) == false) {
-      history.push('/');
-    }
- */
-    dispatch({
-      type: FormAction.setCurrentStep,
-      payload: 2,
-    });
+    Array.from(Array(2)).map(_ => handleServiceAdd());
   }, []);
 
-  useEffect(() => {
-    if (conditionSelected !== '') {
-      setDevices([
-        ...devices,
-        { type: typeSelected, condition: conditionSelected },
-      ]);
-      setTypeSelected('');
-      setConditionSelected('');
-    }
-  }, [typeSelected]);
+  const handleServiceAdd = () => {
+    setServiceList([...serviceList, { type: '', condition: '' }]);
+  };
 
-  useEffect(() => {
-    if (typeSelected !== '') {
-      setDevices([
-        ...devices,
-        { type: typeSelected, condition: conditionSelected },
-      ]);
-      setTypeSelected('');
-      setConditionSelected('');
-    }
-  }, [conditionSelected]);
+  const handleSubmit = () => {
+    console.log(serviceList);
+  };
 
-  async function handleSubmit(e: MouseEvent<HTMLElement>) {
-    e.preventDefault();
+  const handleServiceRemove = index => {
+    console.log('');
+  };
 
-    delete state.currentStep;
+  const handleServiceChange = (e: ChangeEvent<HTMLSelectElement>, index) => {
+    const { name, value } = e.target;
+    const list = [...serviceList];
 
-    const completed = await api
-      .post('/donation', state)
-      .then(res => {
-        toast.success(responseMessage[String(res.status)]);
-        return true;
-      })
-      .catch(error => {
-        if (error.response.data?.error) {
-          toast.error(error.response.data.errorMessage);
-        } else {
-          toast.error(responseMessage['500']);
-        }
-
-        return false;
-      });
-
-    if (completed) {
-      return setTimeout(() => window.location.reload(), 3500);
-    }
-
-    return;
-  }
-
-  function handleChangeDevice(e) {
-    setTypeSelected(e.target.value);
-  }
-
-  function handleChangeCondition(e) {
-    setConditionSelected(e.target.value);
-  }
-
-  function handleSalveDevices(e) {
-    e.preventDefault();
-    const deviceList = devices.filter(
-      device => device.type && device.condition !== '',
-    );
-
-    if (deviceList.length <= 0) {
-      return toast.error('Selecione os items');
-    }
-
-    const count = deviceList.length - state.deviceCount;
-
-    if (deviceList.length > state.deviceCount) {
-      deviceList.forEach(_ => {
-        deviceList.shift();
-        if (count === deviceList.length) {
-          return;
-        }
-      });
-    }
-
-    dispatch({
-      type: FormAction.setDevices,
-      payload: deviceList,
-    });
-
-    setIsCompleted(!isCompleted);
-  }
+    list[index][name] = value;
+    setServiceList(list);
+  };
 
   return (
-    <div className={styles.container}>
-      <h1>Segunda Etapa</h1>
-      <p>Passo {state.currentStep}/2</p>
+    <>
+      <form action="">
+        <div>
+          <label htmlFor="service">Services</label>
+          {serviceList.map((service, index) => (
+            <div key={index}>
+              <select
+                name="type"
+                value={service.type}
+                onChange={e => handleServiceChange(e, index)}
+              >
+                <option value="">Selecione</option>
+                <option value="notebook">Notebook</option>
+              </select>
 
-      <form className={styles.form_group}>
-        {state.deviceCount > 0 &&
-          Array.from({ length: state.deviceCount }, (_, key) => (
-            <div className={styles.input_group} key={key}>
-              <label htmlFor="devices">
-                Equipamento* ({key + 1})
-                <select
-                  name="type"
-                  id="devices"
-                  onChange={e => handleChangeDevice(e)}
-                >
-                  <option>Selecione os equipamento(s)*</option>
-
-                  {equipments.map(({ value, name }) => (
-                    <option value={value} key={value}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <label htmlFor="condition">
-                Selecione a condição* ({key + 1})
-                <select
-                  name="condition"
-                  id="condition"
-                  onChange={e => handleChangeCondition(e)}
-                >
-                  <option>Selecione a condição*</option>
-                  {states.map(({ value, name }) => (
-                    <option value={value} key={value}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <select
+                name="condition"
+                value={service.condition}
+                onChange={e => handleServiceChange(e, index)}
+              >
+                <option value="">Selecione</option>
+                <option value="ruim">ruim</option>
+              </select>
             </div>
           ))}
-        <br />
-        <button onClick={e => handleSalveDevices(e)} disabled={isCompleted}>
-          Salvar
-        </button>
-      </form>
-
-      <div className={styles.btn_group}>
-        <div className={styles.prev}>
-          <Link href="/">Voltar</Link>
         </div>
-        <button
-          className={styles.submit}
-          onClick={handleSubmit}
-          disabled={!isCompleted}
-        >
-          Concluir
-        </button>
-      </div>
-    </div>
+      </form>
+      <button onClick={handleSubmit}>Add</button>
+    </>
   );
 }

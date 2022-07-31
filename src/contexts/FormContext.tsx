@@ -19,6 +19,8 @@ type StateProps = {
   complement: string;
   neighborhood: string;
   deviceCount: number;
+  type: string;
+  condition: string[];
   devices: [{ type: string; condition: string }];
 };
 
@@ -45,6 +47,8 @@ const initialData: StateProps = {
   complement: '',
   neighborhood: '',
   deviceCount: 1,
+  type: '',
+  condition: [],
   devices: [{ type: '', condition: '' }],
 };
 
@@ -102,7 +106,7 @@ const formReducer = (state: StateProps, action: ActionProps) => {
       return { ...state, devices: action.payload };
 
     case FormAction.setCondition:
-      return { ...state, devices: { conditon: action.payload } };
+      return { ...state, devices: action.payload };
 
     default:
       return state;
