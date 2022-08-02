@@ -109,11 +109,12 @@ export default function Step1() {
       <h1>Primeira Etapa</h1>
       <p>Passo {state.currentStep}/2</p>
 
-      <form className={styles.form_group}>
-        <div className={styles.input_group}>
+      <form className="form-group">
+        <div className="input-group">
           <label htmlFor="">
             Nome completo*
             <input
+              className="input-invalid"
               type="text"
               placeholder="Digite seu nome"
               name="setName"
@@ -123,7 +124,7 @@ export default function Step1() {
           </label>
         </div>
 
-        <div className={styles.input_group}>
+        <div className="input-group">
           <label htmlFor="">
             E-mail
             <input
@@ -147,7 +148,7 @@ export default function Step1() {
           </label>
         </div>
 
-        <div className={styles.input_group}>
+        <div className="input-group">
           <label htmlFor="">
             Cep*
             <input
@@ -183,7 +184,7 @@ export default function Step1() {
           </label>
         </div>
 
-        <div className={styles.input_group}>
+        <div className="input-group">
           <label htmlFor="" className={styles.sm}>
             Numero*
             <input
@@ -208,7 +209,7 @@ export default function Step1() {
           </label>
         </div>
 
-        <div className={styles.input_group}>
+        <div className="input-group">
           <label htmlFor="">
             Complemento
             <input

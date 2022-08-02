@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: center;
   margin: 0 auto;
-  max-width: 500px;
+  margin-bottom: 10px;
   
   p {
     font-size: 13px;
@@ -24,44 +24,6 @@
     margin: 30px 0;
   }
 
-  .form_group {
-    margin-bottom: 30px;
-  }
-
-  .input_group {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-
-    label:not(:last-child) {
-      margin-right: 8px;
-    }
-
-    .sm {
-      width: 25%;
-    }
-  }
-
-  label {
-    font-size: 13px;
-    font-weight: 500;
-
-    select {
-      display: block;
-      margin-top: 7px;
-      width: 100%;
-      padding: 10px 5px;
-      border: 2px solid #25cd89;
-      border-radius: 10px;
-      color: #000;
-      outline: 0;
-      font-size: 15px;
-
-      background-color: #fff;
-    }
-  }
-
   .remove_select {
     background-color: #ff335f;
     color: #fff;
@@ -70,6 +32,8 @@
     align-items: center;
     justify-content: center;
     border-radius: 5px;
+    height: 100%;
+    margin-top: 34px;
 
     font-size: 13px;
 
@@ -85,6 +49,7 @@
   .btn_group {
     display: flex;
     align-items: center;
+    margin-top: 20px;
     
 
     div:not(:last-child) {
@@ -97,7 +62,7 @@
     color: #000
   }
 
-  button {
+  .add {
     padding: 5px 10px;
     border-radius: 10px;
     background-color: #00b5b9;
@@ -112,20 +77,6 @@
   }
 
   .submit {
-    background-color: #25cd89;
-    color: #fff;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 20px 40px;
-    border: 0;
-    border-radius: 30px;
-    width: 130px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    cursor: pointer;
-
     svg {
       animation: spin 1s ease-in-out infinite;
       font-size: 20px;
@@ -148,6 +99,15 @@
     .input_group {
       flex-direction: column;
       align-items: flex-start;
+    }
+
+    .remove_select {
+      margin-top: 7px;
+      
+      &::before {
+        content: "Remover";
+        margin-right: 5px;
+      }
     }
   }
 }

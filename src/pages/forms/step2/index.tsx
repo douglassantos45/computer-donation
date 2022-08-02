@@ -40,9 +40,9 @@ export default function Step2() {
   ];
 
   useEffect(() => {
-    if (validation(state) == false) {
+    /* if (validation(state) == false) {
       history.push('/');
-    }
+    } */
 
     dispatch({
       type: FormAction.setCurrentStep,
@@ -123,11 +123,11 @@ export default function Step2() {
     <div className={styles.container}>
       <h1>Segunda Etapa</h1>
       <p>Passo {state.currentStep}/2</p>
-      <form action="" className={styles.form_group}>
+      <form action="" className="form-group">
         <div>
           {renderSelects > 0 &&
             serviceList.map((service, index) => (
-              <div key={index} className={styles.input_group}>
+              <div key={index} className="input-group">
                 <label htmlFor="type">
                   Equipamentos
                   <select
@@ -172,7 +172,11 @@ export default function Step2() {
         </div>
         <br />
         <div className={styles.add_device}>
-          <button onClick={handleServiceAdd} type="button">
+          <button
+            onClick={handleServiceAdd}
+            type="button"
+            className={styles.add}
+          >
             Adicionar
           </button>
           <span className={styles.total_devices}>Total: {renderSelects}</span>
