@@ -22,10 +22,6 @@
 body {
   background-color: var(--white-color);
   color: var(--text-color);
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 input, select {
@@ -40,6 +36,10 @@ input, select {
   font-size: 15px;
 
   background-color: #fff;
+
+  &:invalid {
+    border: 1px solid #ff335f;
+  }
 }
 
 button {
@@ -54,15 +54,38 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: filter 0.3s ease;
 
   cursor: pointer;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
 }
 
+.current-step {
+  font-size: 13px;
+  color: #b8b8d4;
+}
 
 label {
   font-size: 13px;
   width: 100%;
   font-weight: 500;
+}
+
+h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 26px;
+}
+
+hr {
+  height: 1px;
+  border: 0;
+  background-color: #16195c;
+
+  margin: 30px 0;
 }
 
 
@@ -74,6 +97,7 @@ label {
 .container {
   max-width: 1200px;
   padding: 20px 15px;
+  margin: 0 auto;
 }
 
 .form-group {
@@ -82,6 +106,7 @@ label {
 
 .input-group {
   display: flex;
+  position: relative;
 
   label:not(:last-child) {
     margin-right: 8px;
@@ -104,6 +129,22 @@ label {
   border: 1.5px solid #c21f40;
 
   animation: shake 300ms;
+}
+
+.btn-group {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  
+
+  div:not(:last-child) {
+    margin-right: 10px;
+  }
+}
+
+.btn-prev a {
+  font-size: 13px;
+  color: #333
 }
 
 @media (max-width: 451px) {

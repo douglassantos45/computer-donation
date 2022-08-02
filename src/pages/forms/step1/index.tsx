@@ -14,6 +14,7 @@ export default function Step1() {
   const numero = useRef(null);
   const history = useRouter();
   const [emailError, setEmailError] = useState('');
+  const [inputValid, setInputValid] = useState(false);
 
   useEffect(() => {
     dispatch({
@@ -99,8 +100,10 @@ export default function Step1() {
     }
 
     if (validation(state) !== false) {
-      return history.push('/forms/step2');
+      history.push('/forms/step2');
     }
+
+    setInputValid(!inputValid);
 
     toast.error('Alguns campos não foram digitados');
   }
@@ -108,19 +111,19 @@ export default function Step1() {
   return (
     <div className={styles.container}>
       <h1>Primeira Etapa</h1>
-      <p>Passo {state.currentStep}/2</p>
+      <p className="current-step">Passo {state.currentStep}/3</p>
 
       <form className="form-group">
         <div className="input-group">
           <label htmlFor="">
             Nome completo*
             <input
-              className="input-invalid"
               type="text"
               placeholder="Digite seu nome"
               name="setName"
               onChange={handleChange}
               value={state.name}
+              pattern="[a-z A-Z]*"
             />
           </label>
         </div>
@@ -145,6 +148,7 @@ export default function Step1() {
               name="setPhone"
               onChange={handleChange}
               value={state.phone}
+              pattern="[0-9]*"
             />
           </label>
         </div>
@@ -159,6 +163,7 @@ export default function Step1() {
               onChange={handleChange}
               value={state.zip}
               onBlur={checkCep}
+              pattern="[0-9]*"
             />
           </label>
 
@@ -170,6 +175,7 @@ export default function Step1() {
               name="setStreet"
               onChange={handleChange}
               value={state.streetAddress}
+              pattern="[a-z A-Z]*"
             />
           </label>
 
@@ -181,6 +187,7 @@ export default function Step1() {
               name="setState"
               onChange={handleChange}
               value={state.state}
+              pattern="[a-z A-Z]*"
             />
           </label>
         </div>
@@ -195,6 +202,7 @@ export default function Step1() {
               onChange={handleChange}
               value={state.number}
               ref={numero}
+              pattern="[0-9]*"
             />
           </label>
 
@@ -206,6 +214,7 @@ export default function Step1() {
               name="setCity"
               onChange={handleChange}
               value={state.city}
+              pattern="[a-z A-Z]*"
             />
           </label>
         </div>
@@ -219,6 +228,7 @@ export default function Step1() {
               name="setComplement"
               onChange={handleChange}
               value={state.complement}
+              pattern="[a-z A-Z]*"
             />
           </label>
 
@@ -230,6 +240,7 @@ export default function Step1() {
               name="setNeighborhood"
               onChange={handleChange}
               value={state.neighborhood}
+              pattern="[a-z A-Z]*"
             />
           </label>
         </div>

@@ -5,8 +5,8 @@ import { FormProvider } from '../contexts/FormContext';
 function MyApp({ Component, pageProps }) {
   return (
     <FormProvider>
+      <Toaster />
       <div className="container">
-        <Toaster />
         <Component {...pageProps} />
       </div>
     </FormProvider>

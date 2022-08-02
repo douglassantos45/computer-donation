@@ -5,17 +5,15 @@ import { useForm, FormAction } from '../../../contexts/FormContext';
 import toast from 'react-hot-toast';
 import validation from '../../../utils/Validation';
 import { FaTrash } from 'react-icons/fa';
+import { FiPlus } from 'react-icons/fi';
 
 import styles from './styles.module.scss';
-import { api } from '../../../services/api-donation';
-import { responseMessage } from '../../../utils/Messages';
-import { ImSpinner8 } from 'react-icons/im';
 
 export default function Step2() {
   const history = useRouter();
   const { state, dispatch } = useForm();
-  const [serviceList, setServiceList] = useState([{ type: '', condition: '' }]);
-  const [renderSelects, setRenderSelects] = useState(1);
+  const [serviceList, setServiceList] = useState([...state.devices]);
+  const [renderSelects, setRenderSelects] = useState(state.deviceCount);
   const [loading, setLoading] = useState(false);
 
   const equipments = [
@@ -43,6 +41,10 @@ export default function Step2() {
     /* if (validation(state) == false) {
       history.push('/');
     } */
+    dispatch({
+      type: FormAction.setDeviceCount,
+      payload: state.devices.length,
+    });
 
     dispatch({
       type: FormAction.setCurrentStep,
@@ -52,65 +54,25 @@ export default function Step2() {
 
   const handleServiceAdd = () => {
     setRenderSelects(renderSelects + 1);
+
     setServiceList([...serviceList, { type: '', condition: '' }]);
   };
 
-  const handleSalvar = (e: MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    setLoading(true);
-
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-
-    handleSubmit(e);
-  };
-
-  const handleSubmit = async (e: MouseEvent<HTMLElement>) => {
+  const handleNextForm = async (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
 
-    const response = {
-      name: state.name,
-      email: state.email,
-      phone: state.phone,
-      zip: state.zip,
-      city: state.city,
-      state: state.state,
-      streetAddress: state.streetAddress,
-      number: state.number,
-      complement: state.complement,
-      neighborhood: state.neighborhood,
-      deviceCount: renderSelects,
-      devices: serviceList,
-    };
+    dispatch({
+      type: FormAction.setDevices,
+      payload: serviceList,
+    });
 
-    console.log(response);
-
-    delete state.currentStep;
-
-    const completed = await api
-      .post('/donation', response)
-      .then(res => {
-        console.log(res);
-        toast.success(responseMessage[String(res.status)]);
-        return true;
-      })
-      .catch(error => {
-        console.log(error);
-        if (error.response.data?.error) {
-          toast.error(error.response.data.errorMessage);
-        } else {
-          toast.error(responseMessage['500']);
-        }
-
-        return false;
-      });
-
-    if (completed) {
-      //return setTimeout(() => window.location.reload(), 3500);
+    for (let i = 0; i < renderSelects; i++) {
+      if (serviceList[i]['type'] === '' || serviceList[i]['condition'] === '') {
+        return toast.error('Alguns campos não foram digitados');
+      }
     }
 
-    return;
+    return history.push('/forms/step3');
   };
 
   const handleServiceRemove = index => {
@@ -134,12 +96,19 @@ export default function Step2() {
   return (
     <div className={styles.container}>
       <h1>Segunda Etapa</h1>
-      <p>Passo {state.currentStep}/2</p>
+      <p className="current-step">Passo {state.currentStep}/3</p>
+      <div className={styles.add}>
+        <span className={styles.total_devices}>Total: {renderSelects}</span>
+
+        <div onClick={handleServiceAdd}>
+          <FiPlus />
+        </div>
+      </div>
       <form action="" className="form-group">
         <div>
           {renderSelects > 0 &&
             serviceList.map((service, index) => (
-              <div key={index} className="input-group">
+              <div key={index} className={`input-group ${styles.hr}`}>
                 <label htmlFor="type">
                   Equipamentos
                   <select
@@ -183,26 +152,14 @@ export default function Step2() {
             ))}
         </div>
         <br />
-        <div className={styles.add_device}>
-          <button
-            onClick={handleServiceAdd}
-            type="button"
-            className={styles.add}
-          >
-            Adicionar
-          </button>
-          <span className={styles.total_devices}>Total: {renderSelects}</span>
-        </div>
       </form>
 
-      <div className={styles.btn_group}>
-        <div className={styles.prev}>
+      <div className="btn-group">
+        <div className="btn-prev">
           <Link href="/">Voltar</Link>
         </div>
         <div>
-          <button className={styles.submit} onClick={handleSalvar}>
-            {loading ? <ImSpinner8 /> : 'Concluir'}
-          </button>
+          <button onClick={handleNextForm}>Continuar</button>
         </div>
       </div>
     </div>

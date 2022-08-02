@@ -4,25 +4,6 @@
   justify-content: center;
   margin: 0 auto;
   margin-bottom: 10px;
-  
-  p {
-    font-size: 13px;
-    color: #b8b8d4;
-  }
-
-  h1 {
-    margin: 0;
-    padding: 0;
-    font-size: 26px;
-  }
-
-  hr {
-    height: 1px;
-    border: 0;
-    background-color: #16195c;
-
-    margin: 30px 0;
-  }
 
   .remove_select {
     background-color: #ff335f;
@@ -46,55 +27,49 @@
     align-items: center;
   }
 
-  .btn_group {
+  .add {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
-    margin-top: 20px;
     
-
-    div:not(:last-child) {
+    span {
       margin-right: 10px;
+      font-weight: 500;
+    }
+
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 5px;
+      clip-path: circle();
+      background-color: #00b5b9;
+      color: #fff;
+
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      svg {
+        font-size: 22px;
+      }
+
+      &:hover {
+        filter: brightness(0.9);
+      }
     }
   }
 
-  .prev a {
-    font-size: 13px;
-    color: #000
-  }
-
-  .add {
-    padding: 5px 10px;
-    border-radius: 10px;
-    background-color: #00b5b9;
-    color: #fff;
-
-    cursor: pointer;
-  }
+  
 
   .total_devices {
     margin-left: 10px;
     font-size: 15px;
   }
 
-  .submit {
-    svg {
-      animation: spin 1s ease-in-out infinite;
-      font-size: 20px;
-    }
-  }
-
-  button:disabled {
-    background-color: #c1c1c1;
-    cursor: initial;
-  }
 }
 
-.loading {
-  display: none;
-  color: red;
-}
 
-@media (max-width: 420px) {
+@media (max-width: 450px) {
   .container {
     .input_group {
       flex-direction: column;
@@ -112,8 +87,3 @@
   }
 }
 
-@keyframes spin {
-	100% {
-		transform: rotate(360deg);
-	}
-}
