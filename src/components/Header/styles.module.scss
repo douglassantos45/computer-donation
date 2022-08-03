@@ -1,0 +1,165 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+
+  padding: 10px;
+  box-shadow: 0px 1px 3px var(--box-shadow);
+
+  transition: 0.4s;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  span {
+    color: var(--purple);
+  }
+
+  .nav {
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav_list {
+    display: flex;
+    position: relative;
+
+    li:not(:last-child) {
+      margin-right: 2rem;
+    }
+
+    a {
+      color: var(--text-color);
+      transition: color 0.3s ease;
+      font-size: 15px;
+
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+
+    .active_link {
+      color: var(--text-color);
+      font-weight: var(--font-semi-bold);
+    }
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    
+    font-weight: 700;
+    transition: 0.3s;
+    font-size: 20px;
+
+    h1 {
+      font-size: 20px;
+    }
+
+    span {
+      color: var(--primary-color);
+    }
+
+    &:hover {
+      color: var(--);
+    }
+  }
+
+  .close {
+    position: absolute;
+    top: 22px;
+    left: 190px;
+
+
+    font-size: 18px;
+
+    cursor: pointer;
+  }
+
+  .open {
+    display: none;
+    font-size: 22px;
+
+    cursor: pointer;
+  }
+
+  .nav_logo {
+    display: none;
+    span {
+      color: var(--primary-color);
+    }
+  }
+
+}
+
+@media (max-width: 460px) {
+  .header {
+    .nav_list {
+      display: none;
+    }
+
+    .open {
+      display: block;
+    }
+  }
+
+  .nav_menu {
+    position: fixed;
+    bottom: 2rem;
+    background-color: var(--white-color) !important;
+    box-shadow: 2px 8px 24px var(--box-shadow);
+    width: 440px;
+    height: 100vh;
+    right: 0;
+    bottom: 0;
+    margin: 0 auto;
+    transform: translateX(50%);
+    padding: 20px;
+
+    transition: transform 0.3s ease;
+
+    background-color: var(--white-color);
+
+    .nav_list {
+      display: flex;
+    }
+
+    .nav_logo {
+      display: block !important;
+    }
+
+    li:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+
+  .nav_list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    margin-top: 30px;
+  }
+
+  .nav_link {
+    color: var(--text-color);
+    display: flex;
+    padding: 0.5rem;
+    border-radius: 50%;
+
+    i {
+      font-size: 1.6rem;
+    }
+
+    span {
+      display: none;
+    }
+  }
+  
+}

@@ -1,5 +1,6 @@
 import { Toaster } from 'react-hot-toast';
 import '../../styles/global.scss';
+import { Header } from '../components/Header';
 import { FormProvider } from '../contexts/FormContext';
 
 function MyApp({ Component, pageProps }) {
@@ -12,6 +13,7 @@ function MyApp({ Component, pageProps }) {
           },
         }}
       />
+      <Header />
       <div className="container">
         <Component {...pageProps} />
       </div>

@@ -6,6 +6,7 @@
   background: var(--white-color);
   
   padding: 20px;
+  margin-top: 8vh;
 
   section {
     margin-bottom: 10px;
@@ -44,22 +45,9 @@
   .container  {
     #address > div:nth-child(1) {
       flex-wrap: wrap;
-
+      
       div:not(:last-child) {
         margin-top: 15px;
-      }
-    }
-  }
-}
-
-@media (max-width: 490px) {
-  .container {
-    .input-group {
-      align-items: flex-end;
-      margin-bottom: 15px;
-      background-color: red;
-      label:not(:last-child) {
-        margin-bottom: 15px;
       }
     }
   }
