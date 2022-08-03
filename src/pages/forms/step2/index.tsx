@@ -7,6 +7,8 @@ import validation from '../../../utils/Validation';
 import { FaTrash } from 'react-icons/fa';
 import { FiPlus } from 'react-icons/fi';
 
+import { equipments, states } from '../../../database/devices';
+
 import styles from './styles.module.scss';
 
 export default function Step2() {
@@ -15,27 +17,6 @@ export default function Step2() {
   const [serviceList, setServiceList] = useState([...state.devices]);
   const [renderSelects, setRenderSelects] = useState(state.deviceCount);
   const [loading, setLoading] = useState(false);
-
-  const equipments = [
-    { value: 'notebook', name: 'Notebook' },
-    { value: 'desktop', name: 'Desktop' },
-    { value: 'netBook', name: 'NetBook' },
-    { value: 'screen', name: 'Monitor' },
-    { value: 'printer', name: 'Impressora' },
-    { value: 'scanner', name: 'Scanner' },
-  ];
-
-  const states = [
-    {
-      value: 'working',
-      name: 'Tem todas as partes, liga e funciona normalmente',
-    },
-    { value: 'notWorking', name: 'Tem todas as partes, mas não liga mais' },
-    {
-      value: 'broken',
-      name: ' Faltam peças, funciona só as vezes ou está quebrado',
-    },
-  ];
 
   useEffect(() => {
     /* if (validation(state) == false) {
@@ -68,7 +49,7 @@ export default function Step2() {
 
     for (let i = 0; i < renderSelects; i++) {
       if (serviceList[i]['type'] === '' || serviceList[i]['condition'] === '') {
-        return toast.error('Alguns campos não foram digitados');
+        return toast.error('Alguns campos não foram selecionados');
       }
     }
 

@@ -5,7 +5,13 @@ import { FormProvider } from '../contexts/FormContext';
 function MyApp({ Component, pageProps }) {
   return (
     <FormProvider>
-      <Toaster />
+      <Toaster
+        toastOptions={{
+          style: {
+            fontSize: '13px',
+          },
+        }}
+      />
       <div className="container">
         <Component {...pageProps} />
       </div>

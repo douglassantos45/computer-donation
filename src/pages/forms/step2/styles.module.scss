@@ -5,6 +5,26 @@
   margin: 0 auto;
   margin-bottom: 10px;
 
+  margin-top: 5vh;
+  padding: 20px;
+
+  .hr {
+    display: flex;
+    align-items: center;
+    position: relative;
+    &:not(:last-child)::after {
+      content: '';
+      background-color: #e3e3e3;
+      height: 1px;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+    }
+
+    padding-bottom: 20px;
+    
+  }
+
   .remove_select {
     background-color: #ff335f;
     color: #fff;
@@ -41,10 +61,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 5px;
-      clip-path: circle();
+      height: 30px;
+      width: 30px;
+      border-radius: 9px;
       background-color: #00b5b9;
       color: #fff;
+
+      box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
 
       cursor: pointer;
       transition: all 0.3s ease;
@@ -59,13 +82,10 @@
     }
   }
 
-  
-
   .total_devices {
     margin-left: 10px;
     font-size: 15px;
   }
-
 }
 
 

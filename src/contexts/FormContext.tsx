@@ -20,6 +20,7 @@ type StateProps = {
   neighborhood: string;
   deviceCount: number;
   devices: [{ type: string; condition: string }];
+  institution: {};
 };
 
 type ActionProps = {
@@ -46,6 +47,7 @@ const initialData: StateProps = {
   neighborhood: '',
   deviceCount: 1,
   devices: [{ type: '', condition: '' }],
+  institution: {},
 };
 
 //Context

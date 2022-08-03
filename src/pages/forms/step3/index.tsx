@@ -10,100 +10,13 @@ import { responseMessage } from '../../../utils/Messages';
 import { ImSpinner8 } from 'react-icons/im';
 
 import styles from './styles.module.scss';
+import { institutions } from '../../../database/institution';
 
 export default function Step3() {
   const history = useRouter();
   const { state, dispatch } = useForm();
   const [loading, setLoading] = useState(false);
-  const [companyId, setCompanyId] = useState(0);
-
-  const companys = [
-    {
-      id: 1,
-      name: 'Company(1)',
-      city: 'City(1)',
-      bairro: 'Bairro(1)',
-      description: 'Description(1)',
-      social: [
-        {
-          name: 'Instagram',
-          url: 'instagram.com',
-        },
-        {
-          name: 'Facebook',
-          url: 'facebook.com',
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: 'Company(2)',
-      city: 'Company(2)',
-      bairro: 'Bairro(2)',
-      description: 'Description(2)',
-      social: [
-        {
-          name: 'Instagram',
-          url: 'instagram.com',
-        },
-        {
-          name: 'Facebook',
-          url: 'facebook.com',
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: 'Company(3)',
-      city: 'City(3)',
-      bairro: 'Bairro(3)',
-      description: 'Description(3)',
-      social: [
-        {
-          name: 'Instagram',
-          url: 'instagram.com',
-        },
-        {
-          name: 'Facebook',
-          url: 'facebook.com',
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: 'Company(4)',
-      city: 'City(4)',
-      bairro: 'Bairro(4)',
-      description: 'Description(4)',
-      social: [
-        {
-          name: 'Instagram',
-          url: 'instagram.com',
-        },
-        {
-          name: 'Facebook',
-          url: 'facebook.com',
-        },
-      ],
-    },
-    {
-      id: 5,
-      name: 'Company(5)',
-      city: 'City(5)',
-      bairro: 'Bairro(5)',
-      description: 'Description(5)',
-      social: [
-        {
-          name: 'Instagram',
-          url: 'instagram.com',
-        },
-        {
-          name: 'Facebook',
-          url: 'facebook.com',
-        },
-      ],
-    },
-  ];
+  const [institutionId, setInstitutionId] = useState(0);
 
   useEffect(() => {
     /* if (validation(state) == false) {
@@ -119,38 +32,41 @@ export default function Step3() {
       type: FormAction.setCurrentStep,
       payload: 3,
     });
+
+    console.log(state);
   }, []);
 
-  const handleSalvar = (e: MouseEvent<HTMLElement>) => {
+  const handleSubmit = async (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
+
+    const [institution] = institutions.filter(
+      institution => institution.id === institutionId,
+    );
+
+    if (!institution) return toast.error('Selecione a instituição');
+
+    const response = {
+      name: state.name.trim(),
+      email: state.email.trim(),
+      phone: state.phone.trim(),
+      zip: state.zip,
+      city: state.city.trim(),
+      state: state.state.trim(),
+      streetAddress: state.streetAddress.trim(),
+      number: state.number,
+      complement: state.complement.trim(),
+      neighborhood: state.neighborhood.trim(),
+      deviceCount: state.deviceCount,
+      devices: state.devices,
+    };
+
     setLoading(true);
 
     setTimeout(() => {
       setLoading(false);
     }, 2000);
 
-    handleSubmit(e);
-  };
-
-  const handleSubmit = async (e: MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-
-    const [company] = companys.filter(company => company.id === companyId);
-
-    const response = {
-      name: state.name,
-      email: state.email,
-      phone: state.phone,
-      zip: state.zip,
-      city: state.city,
-      state: state.state,
-      streetAddress: state.streetAddress,
-      number: state.number,
-      complement: state.complement,
-      neighborhood: state.neighborhood,
-      deviceCount: state.deviceCount,
-      devices: state.devices,
-    };
+    console.log(response);
 
     const completed = await api
       .post('/donation', response)
@@ -179,7 +95,7 @@ export default function Step3() {
 
   const handleServiceChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
-    setCompanyId(parseInt(value));
+    setInstitutionId(parseInt(value));
   };
 
   return (
@@ -192,27 +108,32 @@ export default function Step3() {
           Instituições
           <select
             name="company"
-            value={companyId}
+            value={institutionId}
             onChange={e => handleServiceChange(e)}
           >
             <option>Selecione...</option>
-            {companys.map(company => (
-              <option value={company.id} key={company.id}>
-                {company.name}
+            {institutions.map(institution => (
+              <option value={institution.id} key={institution.id}>
+                {institution.name}
               </option>
             ))}
           </select>
         </label>
       </form>
 
-      {companys.map(
+      {institutions.map(
         company =>
-          company.id === companyId && (
+          company.id === institutionId && (
             <div key={company.id} className={styles.company_wrapper}>
+              <div className="separator">
+                <div></div>
+                <div>Institição</div>
+                <div></div>
+              </div>
               <h1>Nome: {company.name}</h1>
               <div className={styles.address}>
                 Cidade: <span>{company.city}</span>
-                Bairro: <span>{company.bairro}</span>
+                Bairro: <span>{company.district}</span>
               </div>
               <p>Descrição: {company.description}</p>
 
@@ -233,7 +154,7 @@ export default function Step3() {
           <Link href="/forms/step2">Voltar</Link>
         </div>
         <div>
-          <button className={styles.submit} onClick={handleSalvar}>
+          <button className={styles.submit} onClick={handleSubmit}>
             {loading ? <ImSpinner8 /> : 'Concluir'}
           </button>
         </div>
