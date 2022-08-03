@@ -4,6 +4,7 @@
   justify-content: center;
   margin: 0 auto;
   margin-bottom: 10px;
+  background-color: var(--white-color);
 
   margin-top: 5vh;
   padding: 20px;
@@ -89,7 +90,7 @@
 }
 
 
-@media (max-width: 450px) {
+@media (max-width: 490px) {
   .container {
     .input_group {
       flex-direction: column;
@@ -106,4 +107,5 @@
     }
   }
 }
+
 

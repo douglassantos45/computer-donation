@@ -14,6 +14,7 @@ export default function Step1() {
   const numero = useRef(null);
   const history = useRouter();
   const [emailError, setEmailError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const [inputValid, setInputValid] = useState(false);
 
   useEffect(() => {
@@ -32,13 +33,23 @@ export default function Step1() {
     return true;
   };
 
+  const validatePhone = phone => {
+    if (!validator.isMobilePhone(phone, ['pt-BR'])) {
+      setPhoneError('Esse telefone é inválido!');
+      return false;
+    }
+    setPhoneError('');
+    return true;
+  };
+
   //Capturando dados do inputs
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
-    if (e.target.name == 'setEmail') {
-      validateEmail(e.target.value);
-    }
-    if (e.target.name == 'setPhone') {
-      const phone = e.target.value
+    const { name, value } = e.target;
+
+    if (name == 'setEmail') {
+      validateEmail(value);
+    } else if (name === 'setPhone') {
+      const phone = value
         .replaceAll('(', '')
         .replaceAll(')', '')
         .replaceAll('-', '')
@@ -49,7 +60,7 @@ export default function Step1() {
         type: FormAction.setPhone,
         payload: phone,
       });
-      return;
+      validatePhone(phone);
     }
 
     dispatch({
@@ -123,8 +134,8 @@ export default function Step1() {
         </div>
         <section className={styles.info}>
           <div className="input-group">
-            <label htmlFor="">
-              Nome completo*
+            <label htmlFor="setName">
+              Nome completo <span style={{ color: 'red' }}>*</span>
               <input
                 type="text"
                 placeholder="Digite seu nome"
@@ -146,18 +157,20 @@ export default function Step1() {
                 onChange={handleChange}
                 value={state.email}
               />
-              <span>{emailError}</span>
+              <span className={styles.input_invalid}>{emailError}</span>
             </label>
-            <label htmlFor="">
-              Telefone*
+            <label htmlFor="setPhone">
+              Telefone
+              <span style={{ color: 'red' }}> *</span>
               <input
                 type="text"
                 placeholder="ex: 55749003452"
                 name="setPhone"
                 onChange={handleChange}
                 value={state.phone}
-                pattern="[0-9]{13}"
+                pattern="[0-9]*"
               />
+              <span className={styles.input_invalid}>{phoneError}</span>
             </label>
           </div>
         </section>
@@ -168,10 +181,11 @@ export default function Step1() {
           <div></div>
         </div>
 
-        <section className={styles.address}>
+        <section id={styles.address}>
           <div className="input-group">
-            <label htmlFor="">
-              Cep*
+            <label htmlFor="setZip">
+              Cep
+              <span style={{ color: 'red' }}> *</span>
               <input
                 type="text"
                 placeholder="ex: 44790000"
@@ -183,46 +197,53 @@ export default function Step1() {
               />
             </label>
 
-            <label htmlFor="">
-              Rua*
-              <input
-                type="text"
-                placeholder="ex: Rua Boa Vista"
-                name="setStreet"
-                onChange={handleChange}
-                value={state.streetAddress}
-              />
-            </label>
+            <div className="input-group">
+              <label htmlFor="setStreet">
+                Rua
+                <span style={{ color: 'red' }}> *</span>
+                <input
+                  type="text"
+                  placeholder="ex: Rua Boa Vista"
+                  name="setStreet"
+                  onChange={handleChange}
+                  value={state.streetAddress}
+                />
+              </label>
 
-            <label htmlFor="" className={styles.sm}>
-              UF*
-              <input
-                type="text"
-                placeholder="UF"
-                name="setState"
-                onChange={handleChange}
-                value={state.state}
-                pattern="[a-z A-Z]*"
-              />
-            </label>
+              <label htmlFor="setState" className="sm">
+                UF
+                <span style={{ color: 'red' }}> *</span>
+                <input
+                  type="text"
+                  placeholder="UF"
+                  name="setState"
+                  onChange={handleChange}
+                  value={state.state}
+                  pattern="[a-z A-Z]*"
+                />
+              </label>
+              <label htmlFor="setNumber" className="sm">
+                Numero
+                <span style={{ color: 'red' }}> *</span>
+                <input
+                  type="text"
+                  placeholder="ex: 22"
+                  name="setNumber"
+                  onChange={handleChange}
+                  value={state.number}
+                  ref={numero}
+                  pattern="[0-9]*"
+                />
+              </label>
+            </div>
           </div>
 
-          <div className="input-group">
-            <label htmlFor="" className={styles.sm}>
-              Numero*
-              <input
-                type="text"
-                placeholder="ex: 22"
-                name="setNumber"
-                onChange={handleChange}
-                value={state.number}
-                ref={numero}
-                pattern="[0-9]*"
-              />
-            </label>
+          <div className="input-group"></div>
 
-            <label htmlFor="">
-              Cidade*
+          <div className="input-group">
+            <label htmlFor="setCity">
+              Cidade
+              <span style={{ color: 'red' }}> *</span>
               <input
                 type="text"
                 placeholder="Digite sua cidade"
@@ -232,9 +253,6 @@ export default function Step1() {
                 pattern="[a-z A-Z]*"
               />
             </label>
-          </div>
-
-          <div className="input-group">
             <label htmlFor="">
               Complemento
               <input
@@ -246,8 +264,9 @@ export default function Step1() {
               />
             </label>
 
-            <label htmlFor="">
-              Vizinhança*
+            <label htmlFor="setNeighborhood">
+              Vizinhança
+              <span style={{ color: 'red' }}> *</span>
               <input
                 type="text"
                 placeholder="Informe a vizinhança"

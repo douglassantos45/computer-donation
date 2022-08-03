@@ -176,11 +176,24 @@ hr {
   }
 }
 
-@media (max-width: 451px) {
+@media (max-width: 490px) {
   .container {
     .input-group {
       flex-direction: column;
+      align-items: flex-start !important;
+
+      label:not(:last-child) {
+        margin-bottom: 15px;
+      }
+    }
+
+    section .input-group {
+      flex-direction: column;
       align-items: flex-start;
+      margin-bottom: 15px;
+      label:not(:last-child) {
+        margin-bottom: 15px;
+      }
     }
   }
 }

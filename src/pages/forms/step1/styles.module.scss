@@ -3,21 +3,21 @@
   flex-direction: column;
   justify-content: center;
   
+  background: var(--white-color);
   
   padding: 20px;
 
   section {
     margin-bottom: 10px;
-
-    label[for="setEmail"] {
-     span {
-      color: red;
-      font-size: 11px;
-      font-weight: 400;
-     }
-    }
   }
+
 }
+
+.input_invalid {
+  color: red;
+  font-size: 11px;
+  font-weight: 400;
+ }
 
 .loading {
   position: fixed;
@@ -37,5 +37,30 @@
     background-color: #fff;
     padding: 10px 30px;
     border-radius: 5px;
+  }
+}
+
+@media(max-width: 780px) {
+  .container  {
+    #address > div:nth-child(1) {
+      flex-wrap: wrap;
+
+      div:not(:last-child) {
+        margin-top: 15px;
+      }
+    }
+  }
+}
+
+@media (max-width: 490px) {
+  .container {
+    .input-group {
+      align-items: flex-end;
+      margin-bottom: 15px;
+      background-color: red;
+      label:not(:last-child) {
+        margin-bottom: 15px;
+      }
+    }
   }
 }
