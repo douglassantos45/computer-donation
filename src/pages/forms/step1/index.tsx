@@ -102,7 +102,7 @@ export default function Step1() {
 
       const { data } = result;
 
-      if (data) {
+      if (data.erro) {
         setZip('');
         dispatch({
           type: FormAction.setZip,
