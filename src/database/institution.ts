@@ -4,16 +4,7 @@ type InstituionsProps = {
   city: string;
   district: string;
   description: string;
-  social: [
-    {
-      name: string;
-      url: string;
-    },
-    {
-      name: string;
-      url: string;
-    },
-  ];
+  social: { name: string; url: string }[];
 };
 
 export const institutions: InstituionsProps[] = [
@@ -27,11 +18,15 @@ export const institutions: InstituionsProps[] = [
     social: [
       {
         name: 'Instagram',
-        url: 'instagram.com',
+        url: 'https://instagram.com',
       },
       {
         name: 'Facebook',
-        url: 'facebook.com',
+        url: 'https://facebook.com',
+      },
+      {
+        name: 'App Masters',
+        url: 'https://www.appmasters.io/',
       },
     ],
   },
@@ -44,11 +39,11 @@ export const institutions: InstituionsProps[] = [
     social: [
       {
         name: 'Instagram',
-        url: 'instagram.com',
+        url: 'https://instagram.com',
       },
       {
         name: 'Facebook',
-        url: 'facebook.com',
+        url: 'https://facebook.com',
       },
     ],
   },
@@ -61,11 +56,11 @@ export const institutions: InstituionsProps[] = [
     social: [
       {
         name: 'Instagram',
-        url: 'instagram.com',
+        url: 'https://instagram.com',
       },
       {
         name: 'Facebook',
-        url: 'facebook.com',
+        url: 'https://facebook.com',
       },
     ],
   },
@@ -78,11 +73,11 @@ export const institutions: InstituionsProps[] = [
     social: [
       {
         name: 'Instagram',
-        url: 'instagram.com',
+        url: 'https://instagram.com',
       },
       {
         name: 'Facebook',
-        url: 'facebook.com',
+        url: 'https://facebook.com',
       },
     ],
   },
@@ -95,11 +90,11 @@ export const institutions: InstituionsProps[] = [
     social: [
       {
         name: 'Instagram',
-        url: 'instagram.com',
+        url: 'https://instagram.com',
       },
       {
         name: 'Facebook',
-        url: 'facebook.com',
+        url: 'https://facebook.com',
       },
     ],
   },

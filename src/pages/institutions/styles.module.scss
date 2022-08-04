@@ -27,7 +27,6 @@
       margin-right: 10px;
       margin-bottom: 5px;
     }
-
     
   }
 
@@ -45,10 +44,19 @@
   .social {
     font-size: 14px;
     margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    > a:not(:last-child) {
-      margin-right: 10px;
+    font-weight: 500;
+    a {
+      transition: color 0.3s ease;
+      font-weight: 400;
+      color: var(--text-color);
+
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+
+      &:hover {
+        color: var(--primary-color);
+      }
     }
   }
 }
