@@ -7,17 +7,22 @@ import validation from '../../../utils/Validation';
 import validator from 'validator';
 
 import styles from './styles.module.scss';
+import MaskedInput from '../../../components/MaskedInput';
 
 export default function Step1() {
   const { state, dispatch } = useForm();
   const loading = useRef(null);
   const numero = useRef(null);
+
   const history = useRouter();
+
   const [emailError, setEmailError] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [inputValid, setInputValid] = useState(false);
+  const [zip, setZip] = useState('');
 
   useEffect(() => {
+    //Recarrega em qual formulário o usuário está ex: 1/2 ou 2/2
     dispatch({
       type: FormAction.setCurrentStep,
       payload: 1,
@@ -47,8 +52,9 @@ export default function Step1() {
     const { name, value } = e.target;
 
     if (name == 'setEmail') {
-      validateEmail(value);
+      setInputValid(validateEmail(value));
     } else if (name === 'setPhone') {
+      //Removendo caracteres do telefone
       const phone = value
         .replaceAll('(', '')
         .replaceAll(')', '')
@@ -60,7 +66,8 @@ export default function Step1() {
         type: FormAction.setPhone,
         payload: phone,
       });
-      validatePhone(phone);
+
+      setInputValid(validatePhone(phone)); //Verificando se o telefone é válido 'pt-BR'
     }
 
     dispatch({
@@ -71,42 +78,61 @@ export default function Step1() {
 
   async function checkCep(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
+
+    setZip(value); //Armazenando o cep com máscara ex:44790-000 (Para o back-end que aceita somente com máscara)
+
     if (e.target.value !== '') {
       dispatch({
         type: FormAction[name],
-        payload: value,
+        payload: zip,
       });
 
-      loading.current.style.display = 'flex';
+      loading.current.style.display = 'flex'; //Mostrando loading de carregamento do cep
 
+      //Removendo loading depois de 2s
       setTimeout(async () => {
         loading.current.style.display = 'none';
-      }, 2000);
+      }, 2000); //2s
 
       const cep = value.replace(/\D/g, '');
-      const result = await api.get(`${cep}/json/`).then(res => res.data);
+      const result = await api.get(`${cep}/json/`);
+
+      const { data } = result;
+
+      if (data.erro) {
+        dispatch({
+          type: FormAction.setZip,
+          payload: '',
+        });
+        setZip('');
+        return toast.error('Cep Invalido');
+      }
 
       dispatch({
         type: FormAction.setCity,
-        payload: result.localidade,
+        payload: data.localidade,
       });
 
       dispatch({
         type: FormAction.setStreet,
-        payload: result.logradouro,
+        payload: data.logradouro,
       });
 
       dispatch({
         type: FormAction.setState,
-        payload: result.uf,
+        payload: data.uf,
       });
 
       numero.current.focus();
     }
   }
 
+  //Validando alguns dados e passando para a próxima etapa do formulário
   function handleNextForm(e) {
     e.preventDefault();
+
+    if (!inputValid)
+      return toast.error('Preencha corretamente todos os campos');
 
     if (state.email !== '' && validateEmail(state.email) === false) {
       return toast.error('Email inválido');
@@ -186,14 +212,12 @@ export default function Step1() {
             <label htmlFor="setZip">
               Cep
               <span style={{ color: 'red' }}> *</span>
-              <input
-                type="text"
-                placeholder="ex: 44790000"
-                name="setZip"
-                onChange={handleChange}
+              <MaskedInput
                 value={state.zip}
+                onChange={handleChange}
+                name="setZip"
                 onBlur={checkCep}
-                pattern="[0-9]{8}"
+                placeholder="ex: 44790-000"
               />
             </label>
 

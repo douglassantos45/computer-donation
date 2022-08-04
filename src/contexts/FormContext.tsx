@@ -1,5 +1,3 @@
-//Criando 4 etapas
-//UseReducer
 import { createContext, ReactNode, useContext, useReducer } from 'react';
 
 type FormProviderProps = {
@@ -19,8 +17,7 @@ type StateProps = {
   complement: string;
   neighborhood: string;
   deviceCount: number;
-  devices: [{ type: string; condition: string }];
-  institution: {};
+  devices: { type: string; condition: string }[];
 };
 
 type ActionProps = {
@@ -47,7 +44,6 @@ const initialData: StateProps = {
   neighborhood: '',
   deviceCount: 1,
   devices: [{ type: '', condition: '' }],
-  institution: {},
 };
 
 //Context
@@ -72,6 +68,7 @@ export enum FormAction {
 //Recebe dados e ações
 const formReducer = (state: StateProps, action: ActionProps) => {
   switch (action.type) {
+    //State são os dados que eu já tenho
     //payload são os dados que quero alterar
     case FormAction.setCurrentStep:
       return { ...state, currentStep: action.payload };
@@ -109,7 +106,7 @@ const formReducer = (state: StateProps, action: ActionProps) => {
 
 //Provider
 export const FormProvider = ({ children }: FormProviderProps) => {
-  //State - dados, dispatch - função
+  //State - dados iniciais, dispatch - função para alterar os dados
   const [state, dispatch] = useReducer(formReducer, initialData);
   const value = { state, dispatch };
 

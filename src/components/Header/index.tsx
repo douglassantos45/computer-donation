@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 import { VscChromeClose, VscListSelection } from 'react-icons/vsc';
+import { ActiveLink } from '../ActiveLink';
 
 import styles from './styles.module.scss';
 
@@ -30,20 +31,21 @@ export function Header() {
           )}
           <ul className={styles.nav_list}>
             <li className={styles.nav_items}>
-              <Link
-                href="/"
-                className={`${styles.nav_link} ${styles.active_link}`}
-              >
-                Doar
-              </Link>
+              <ActiveLink activeClassName={styles.active_link} href={'/'}>
+                <a className={`${styles.nav_link} ${styles.active_link}`}>
+                  Doar
+                </a>
+              </ActiveLink>
             </li>
             <li className={styles.nav_items}>
-              <Link
+              <ActiveLink
+                activeClassName={styles.active_link}
                 href="/institutions"
-                className={`${styles.nav_link} ${styles.active_link}`}
               >
-                Instituições
-              </Link>
+                <a className={`${styles.nav_link} ${styles.active_link}`}>
+                  Instituições
+                </a>
+              </ActiveLink>
             </li>
           </ul>
           {modal && (

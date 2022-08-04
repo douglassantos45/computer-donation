@@ -39,14 +39,27 @@
       transition: color 0.3s ease;
       font-size: 15px;
 
+      position: relative;
+
       &:hover {
         color: var(--primary-color);
       }
-    }
 
-    .active_link {
-      color: var(--text-color);
-      font-weight: var(--font-semi-bold);
+      &.active_link {
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+    
+      &.active_link::after {
+        content: '';
+        height: 2px;
+        border-radius: 3px 3px 0 0;
+        width: 100%;
+        position: absolute;
+        bottom: -23px;
+        left: 0;
+        background: var(--primary-color);
+      }
     }
   }
 
@@ -126,10 +139,6 @@
 
     background-color: var(--white-color);
 
-    .nav_list {
-      display: flex;
-    }
-
     .nav_logo {
       display: block !important;
     }
@@ -137,28 +146,36 @@
     li:not(:last-child) {
       margin-bottom: 10px;
     }
-  }
 
-  .nav_list {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    .nav_list {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+  
+      margin-top: 30px;
 
-    margin-top: 30px;
-  }
+      a {
+        &.active_link::after {
+          bottom: -8px;
 
-  .nav_link {
-    color: var(--text-color);
-    display: flex;
-    padding: 0.5rem;
-    border-radius: 50%;
-
-    i {
-      font-size: 1.6rem;
+        }
+      }
     }
-
-    span {
-      display: none;
+  
+  
+    .nav_link {
+      color: var(--text-color);
+      display: flex;
+      padding: 0.5rem;
+      border-radius: 50%;
+  
+      i {
+        font-size: 1.6rem;
+      }
+  
+      span {
+        display: none;
+      }
     }
   }
   

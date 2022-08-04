@@ -22,6 +22,7 @@ export default function Step2() {
     /* if (validation(state) == false) {
       history.push('/');
     } */
+    //Recarregando o total de dispositivo quando o usuário voltar para o formulário 1
     dispatch({
       type: FormAction.setDeviceCount,
       payload: state.devices.length,
@@ -33,8 +34,9 @@ export default function Step2() {
     });
   }, []);
 
+  //Função para adicionar select de forma dinâmica quando clica no botão de add
   const handleServiceAdd = () => {
-    setRenderSelects(renderSelects + 1);
+    setRenderSelects(renderSelects + 1); //Armazenando o total de selects adicionado
 
     setServiceList([...serviceList, { type: '', condition: '' }]);
   };
@@ -47,6 +49,7 @@ export default function Step2() {
       payload: serviceList,
     });
 
+    //Verificando se existe algum select sem está selecionado
     for (let i = 0; i < renderSelects; i++) {
       if (serviceList[i]['type'] === '' || serviceList[i]['condition'] === '') {
         return toast.error('Alguns campos não foram selecionados');
@@ -56,16 +59,16 @@ export default function Step2() {
     return history.push('/forms/step3');
   };
 
+  //Removendo o campo de select pelo index
   const handleServiceRemove = index => {
     const list = [...serviceList];
     list.splice(index, 1);
     setServiceList(list);
 
     setRenderSelects(renderSelects - 1);
-
-    console.log(renderSelects);
   };
 
+  //Adicionado na lista de devices todos os dados que foram selecionados nos campos dos selects
   const handleServiceChange = (e: ChangeEvent<HTMLSelectElement>, index) => {
     const { name, value } = e.target;
     const list = [...serviceList];

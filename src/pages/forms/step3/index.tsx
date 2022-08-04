@@ -53,7 +53,7 @@ export default function Step3() {
       city: state.city.trim(),
       state: state.state.trim(),
       streetAddress: state.streetAddress.trim(),
-      number: state.number,
+      number: parseInt(state.number),
       complement: state.complement.trim(),
       neighborhood: state.neighborhood.trim(),
       deviceCount: state.deviceCount,
