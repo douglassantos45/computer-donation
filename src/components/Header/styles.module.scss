@@ -47,7 +47,7 @@
 
       &.active_link {
         color: var(--primary-color);
-        font-weight: bold;
+        font-weight: 500;
       }
     
       &.active_link::after {
@@ -157,7 +157,6 @@
       a {
         &.active_link::after {
           bottom: -8px;
-
         }
       }
     }
@@ -168,14 +167,6 @@
       display: flex;
       padding: 0.5rem;
       border-radius: 50%;
-  
-      i {
-        font-size: 1.6rem;
-      }
-  
-      span {
-        display: none;
-      }
     }
   }
   
