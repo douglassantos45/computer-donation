@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { VscChromeClose, VscListSelection } from 'react-icons/vsc';
 import { ActiveLink } from '../ActiveLink';
 
