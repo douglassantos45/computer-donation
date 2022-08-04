@@ -140,7 +140,12 @@ export default function Step3() {
               <div className={styles.social}>
                 <span>Redes Sociais: </span>
                 {company.social.map(({ url, name }, index) => (
-                  <a href={url} key={index} target="_blank">
+                  <a
+                    href={url}
+                    key={index}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     {name}
                   </a>
                 ))}

@@ -19,10 +19,11 @@ type InstituionsProps = {
 export const institutions: InstituionsProps[] = [
   {
     id: 1,
-    name: 'Company(1)',
-    city: 'City(1)',
-    district: 'Bairro(1)',
-    description: 'Description(1)',
+    name: 'App Masters Donation',
+    city: 'Juiz de Fora',
+    district: 'Av Barão do Rio Branco',
+    description: `Somos especialistas em desenvolvimento de software e entregamos projetos de alta qualidade de forma ágil e assertiva.
+    Muito mais do que apenas desenvolver aplicativos e sistemas web, gostamos de criar cases de sucessos, e tornar nossos clientes muito melhores através da tecnologia`,
     social: [
       {
         name: 'Instagram',

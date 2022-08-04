@@ -1,4 +1,54 @@
 .container {
-  margin-top: 70px;
   padding: 20px;
+  margin-top: 7vh;
+  background-color: var(--white-color);
+}
+
+.company_wrapper {
+  padding: 25px 40px;
+
+  > h1 {
+    font-size: 21px;
+    margin-bottom: 10px;
+  }
+
+  div:not(:first-child) {
+    margin-top: 15px;
+  }
+
+  .address {
+    font-size: 15px;
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: column;
+
+    span:not(:last-child) {
+      margin-right: 10px;
+      margin-bottom: 5px;
+    }
+
+    
+  }
+
+  .description {
+    font-size: 14px;
+    font-weight: 500;
+
+    p {
+      font-size: 15px;
+      font-weight: 400;
+      text-align: justify;
+    }
+  }
+
+  .social {
+    font-size: 14px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    > a:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
 }
