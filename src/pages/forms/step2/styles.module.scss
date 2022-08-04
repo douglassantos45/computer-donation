@@ -9,6 +9,11 @@
   margin-top: 6vh;
   padding: 20px;
 
+  .submit svg{
+    animation: spin 1s ease-in-out infinite;
+    font-size: 20px;
+  }
+
   .hr {
     display: flex;
     align-items: center;
@@ -109,3 +114,8 @@
 }
 
 
+@keyframes spin {
+	100% {
+		transform: rotate(360deg);
+	}
+}

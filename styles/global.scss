@@ -157,9 +157,10 @@ hr {
   }
 }
 
-.btn-prev a {
+.btn-prev span {
   font-size: 13px;
-  color: #333
+  color: #333;
+  cursor: pointer;
 }
 
 .separator {

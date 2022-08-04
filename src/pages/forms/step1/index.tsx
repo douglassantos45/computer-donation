@@ -84,7 +84,7 @@ export default function Step1() {
     if (e.target.value !== '') {
       dispatch({
         type: FormAction[name],
-        payload: zip,
+        payload: value,
       });
 
       loading.current.style.display = 'flex'; //Mostrando loading de carregamento do cep
@@ -95,16 +95,19 @@ export default function Step1() {
       }, 2000); //2s
 
       const cep = value.replace(/\D/g, '');
+
+      if (cep.length < 7) return;
+
       const result = await api.get(`${cep}/json/`);
 
       const { data } = result;
 
-      if (data.erro) {
+      if (data) {
+        setZip('');
         dispatch({
           type: FormAction.setZip,
           payload: '',
         });
-        setZip('');
         return toast.error('Cep Invalido');
       }
 
@@ -150,7 +153,7 @@ export default function Step1() {
   return (
     <div className={styles.container}>
       <h1>Primeira Etapa</h1>
-      <p className="current-step">Passo {state.currentStep}/3</p>
+      <p className="current-step">Passo {state.currentStep}/2</p>
 
       <form className="form-group">
         <div className="separator">

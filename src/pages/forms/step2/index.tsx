@@ -6,6 +6,9 @@ import toast from 'react-hot-toast';
 import validation from '../../../utils/Validation';
 import { FaTrash } from 'react-icons/fa';
 import { FiPlus } from 'react-icons/fi';
+import { api } from '../../../services/api-donation';
+import { responseMessage } from '../../../utils/Messages';
+import { ImSpinner8 } from 'react-icons/im';
 
 import { equipments, states } from '../../../database/devices';
 
@@ -41,24 +44,6 @@ export default function Step2() {
     setServiceList([...serviceList, { type: '', condition: '' }]);
   };
 
-  const handleNextForm = async (e: MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-
-    dispatch({
-      type: FormAction.setDevices,
-      payload: serviceList,
-    });
-
-    //Verificando se existe algum select sem está selecionado
-    for (let i = 0; i < renderSelects; i++) {
-      if (serviceList[i]['type'] === '' || serviceList[i]['condition'] === '') {
-        return toast.error('Alguns campos não foram selecionados');
-      }
-    }
-
-    return history.push('/forms/step3');
-  };
-
   //Removendo o campo de select pelo index
   const handleServiceRemove = index => {
     const list = [...serviceList];
@@ -77,10 +62,81 @@ export default function Step2() {
     setServiceList(list);
   };
 
+  const pagePreview = () => {
+    return history.push('/');
+  };
+
+  const handleSaveState = () => {
+    dispatch({
+      type: FormAction.setDevices,
+      payload: serviceList,
+    });
+
+    pagePreview();
+  };
+
+  const handleSubmit = async (e: MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    //Verificando se existe algum select sem está selecionado
+    for (let i = 0; i < renderSelects; i++) {
+      if (serviceList[i]['type'] === '' || serviceList[i]['condition'] === '') {
+        return toast.error('Alguns campos não foram selecionados');
+      }
+    }
+
+    const response = {
+      name: state.name.trim(),
+      email: state.email.trim(),
+      phone: state.phone.trim(),
+      zip: state.zip,
+      city: state.city.trim(),
+      state: state.state.trim(),
+      streetAddress: state.streetAddress.trim(),
+      number: parseInt(state.number),
+      complement: state.complement.trim(),
+      neighborhood: state.neighborhood.trim(),
+      deviceCount: state.deviceCount,
+      devices: state.devices,
+    };
+
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    console.log(response);
+
+    const completed = await api
+      .post('/donation', response)
+      .then(res => {
+        console.log(res);
+        toast.success(responseMessage[String(res.status)]);
+        return true;
+      })
+      .catch(error => {
+        console.log(error);
+        if (error.response.data?.error) {
+          toast.error(error.response.data.errorMessage);
+        } else {
+          toast.error(responseMessage['500']);
+        }
+
+        return false;
+      });
+
+    if (completed) {
+      //return setTimeout(() => window.location.reload(), 3500);
+    }
+
+    return;
+  };
+
   return (
     <div className={styles.container}>
       <h1>Segunda Etapa</h1>
-      <p className="current-step">Passo {state.currentStep}/3</p>
+      <p className="current-step">Passo {state.currentStep}/2</p>
       <div className={styles.add}>
         <span className={styles.total_devices}>Total: {renderSelects}</span>
 
@@ -139,11 +195,13 @@ export default function Step2() {
       </form>
 
       <div className="btn-group">
-        <div className="btn-prev">
-          <Link href="/">Voltar</Link>
+        <div className="btn-prev" onClick={handleSaveState}>
+          <span>Voltar</span>
         </div>
         <div>
-          <button onClick={handleNextForm}>Continuar</button>
+          <button className={styles.submit} onClick={handleSubmit}>
+            {loading ? <ImSpinner8 /> : 'Concluir'}
+          </button>
         </div>
       </div>
     </div>
