@@ -18,11 +18,12 @@ export default function Step1() {
 
   const [emailError, setEmailError] = useState('');
   const [phoneError, setPhoneError] = useState('');
-  const [inputValid, setInputValid] = useState(false);
-  const [zip, setZip] = useState('');
 
   useEffect(() => {
     //Recarrega em qual formulário o usuário está ex: 1/2 ou 2/2
+    validateEmail(state.email);
+    state.phone && validatePhone(state.phone);
+
     dispatch({
       type: FormAction.setCurrentStep,
       payload: 1,
@@ -30,7 +31,7 @@ export default function Step1() {
   }, []);
 
   const validateEmail = email => {
-    if (!validator.isEmail(email)) {
+    if (!validator.isEmail(email) && email != '') {
       setEmailError('Digite um email válido!');
       return false;
     }
@@ -52,7 +53,7 @@ export default function Step1() {
     const { name, value } = e.target;
 
     if (name == 'setEmail') {
-      setInputValid(validateEmail(value));
+      validateEmail(value);
     } else if (name === 'setPhone') {
       //Removendo caracteres do telefone
       const phone = value
@@ -67,7 +68,7 @@ export default function Step1() {
         payload: phone,
       });
 
-      setInputValid(validatePhone(phone)); //Verificando se o telefone é válido 'pt-BR'
+      validatePhone(phone); //Verificando se o telefone é válido 'pt-BR'
     }
 
     dispatch({
@@ -79,8 +80,7 @@ export default function Step1() {
   async function checkCep(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
 
-    setZip(value); //Armazenando o cep com máscara ex:44790-000 (Para o back-end que aceita somente com máscara)
-
+    //Capturando os dados e armazenando somente se tiver dados
     if (e.target.value !== '') {
       dispatch({
         type: FormAction[name],
@@ -96,14 +96,14 @@ export default function Step1() {
 
       const cep = value.replace(/\D/g, '');
 
-      if (cep.length < 7) return;
+      if (cep.length < 7) return; //Impedindo de consultar a api quando o tatal de caracteres for abaixo do padrão do cep
 
       const result = await api.get(`${cep}/json/`);
 
       const { data } = result;
 
+      //Verificando se o cep foi encontrado e retornando uma mensagem de erro
       if (data.erro) {
-        setZip('');
         dispatch({
           type: FormAction.setZip,
           payload: '',
@@ -134,20 +134,11 @@ export default function Step1() {
   function handleNextForm(e) {
     e.preventDefault();
 
-    if (!inputValid)
-      return toast.error('Preencha corretamente todos os campos');
-
-    if (state.email !== '' && validateEmail(state.email) === false) {
-      return toast.error('Email inválido');
-    }
-
     if (validation(state) !== false) {
       return history.push('/forms/step2');
     }
 
-    setInputValid(!inputValid);
-
-    toast.error('Preencha todos os campos.');
+    toast.error('Preencha todos os campos obrigatórios.');
   }
 
   return (
@@ -247,6 +238,7 @@ export default function Step1() {
                   onChange={handleChange}
                   value={state.state}
                   pattern="[a-z A-Z]*"
+                  disabled={!!state.state}
                 />
               </label>
               <label htmlFor="setNumber" className="sm">
@@ -277,7 +269,7 @@ export default function Step1() {
                 name="setCity"
                 onChange={handleChange}
                 value={state.city}
-                pattern="[a-z A-Z]*"
+                disabled={!!state.city}
               />
             </label>
             <label htmlFor="">

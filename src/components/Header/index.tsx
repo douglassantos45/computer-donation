@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { VscChromeClose, VscListSelection } from 'react-icons/vsc';
 import { ActiveLink } from '../ActiveLink';
 
@@ -30,17 +29,17 @@ export function Header() {
             </div>
           )}
           <ul className={styles.nav_list}>
-            <li className={styles.nav_items}>
-              <ActiveLink activeClassName={styles.active_link} href={'/'}>
+            <li className={styles.nav_items} onClick={_ => setModal(false)}>
+              <ActiveLink activeClassName={styles.active_link} href="/">
                 <a className={`${styles.nav_link} ${styles.active_link}`}>
                   Doar
                 </a>
               </ActiveLink>
             </li>
-            <li className={styles.nav_items}>
+            <li className={styles.nav_items} onClick={_ => setModal(false)}>
               <ActiveLink
                 activeClassName={styles.active_link}
-                href="/institutions"
+                href="/instituicoes"
               >
                 <a className={`${styles.nav_link} ${styles.active_link}`}>
                   Instituições

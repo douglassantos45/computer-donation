@@ -102,10 +102,6 @@ export default function Step2() {
 
     setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-
     console.log(response);
 
     const completed = await api
@@ -113,15 +109,16 @@ export default function Step2() {
       .then(res => {
         console.log(res);
         toast.success(responseMessage[String(res.status)]);
+        setLoading(false);
         return true;
       })
       .catch(error => {
-        console.log(error);
         if (error.response.data?.error) {
           toast.error(error.response.data.errorMessage);
         } else {
           toast.error(responseMessage['500']);
         }
+        setLoading(false);
 
         return false;
       });

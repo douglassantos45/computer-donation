@@ -50,6 +50,11 @@ input, select {
   &:focus {
     border: 1px solid var(--primary-color);
   }
+
+  &:disabled {
+    color: #7c7c7c;
+    background-color: #e3e3e3;
+  }
 }
 
 button {
@@ -128,7 +133,7 @@ hr {
   }
 
   .sm {
-    width: 25%;
+    width: 30%;
   }
 
   .mb {
@@ -179,6 +184,21 @@ hr {
     padding: 0 1.35rem;
     font-size: 13px;
     line-height: 0;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 1rem;
+  border-radius: .5rem;
+  background-color: hsl(228, 8%, 76%);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsl(228, 8%, 64%);
+  border-radius: .6rem;
+
+  &:hover {
+    background-color:#07b16c;
   }
 }
 

@@ -10,6 +10,7 @@ function MyApp({ Component, pageProps }) {
         toastOptions={{
           style: {
             fontSize: '13px',
+            padding: '15px 10px',
           },
         }}
       />

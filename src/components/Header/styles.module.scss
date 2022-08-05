@@ -5,7 +5,7 @@
   width: 100%;
   background-color: #fff;
 
-  padding: 10px;
+  padding: 10px 20px;
   box-shadow: 0px 1px 3px var(--box-shadow);
 
   transition: 0.4s;
@@ -86,12 +86,12 @@
 
   .close {
     position: absolute;
-    top: 25px;
+    top: 22px;
     right: 15px;
     display: none;
 
 
-    font-size: 18px;
+    font-size: 20px;
 
     cursor: pointer;
   }
@@ -143,6 +143,9 @@
 
     .nav_logo {
       display: block !important;
+      h1 {
+        font-size: 20px;
+      }
     }
 
     li:not(:last-child) {
@@ -154,7 +157,7 @@
       flex-direction: column;
       align-items: flex-start;
   
-      margin-top: 30px;
+      margin-top: 40px;
 
       a {
         font-size: 18px;

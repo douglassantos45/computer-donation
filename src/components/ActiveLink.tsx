@@ -13,10 +13,9 @@ export function ActiveLink({
   ...rest
 }: ActiveLinkProps) {
   const { asPath } = useRouter();
-
   const className = asPath === rest.href ? activeClassName : '';
 
-  //CloneElement ele pega os filhos para modificar os comportamento do children
+  //CloneElement ele pega os filhos da tag para modificar os comportamentos
   return (
     <Link {...rest}>
       {cloneElement(children, {

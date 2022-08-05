@@ -6,7 +6,7 @@
   background: var(--white-color);
   
   padding: 20px;
-  margin-top: 6vh;
+  margin-top: 8vh;
 
   section {
     margin-bottom: 10px;
@@ -21,14 +21,17 @@
  }
 
 .loading {
+  background-color: rgba(0, 0, 0, 0.33);
   position: fixed;
+  top: 0;
   left: 0;
   
   display: none;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 50px;
+  height: 100vh;
+
   
   p {
     
