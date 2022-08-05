@@ -103,31 +103,21 @@ export default function Step2() {
     setLoading(true);
 
     console.log(response);
+    try {
+      const completed = await api.post('/donation', response);
 
-    const completed = await api
-      .post('/donation', response)
-      .then(res => {
-        console.log(res);
-        toast.success(responseMessage[String(res.status)]);
+      if (completed.status === 201) {
+        toast.success('Dados enviados com sucesso!!');
         setLoading(false);
         return true;
-      })
-      .catch(error => {
-        if (error.response.data?.error) {
-          toast.error(error.response.data.errorMessage);
-        } else {
-          toast.error(responseMessage['500']);
-        }
-        setLoading(false);
-
-        return false;
-      });
-
-    if (completed) {
-      //return setTimeout(() => window.location.reload(), 3500);
+      }
+    } catch (e) {
+      if (e.response.status == 500) {
+        return toast.error(responseMessage['500']);
+      }
+      toast.error(e.response.data.errorMessage);
+      return setLoading(false);
     }
-
-    return;
   };
 
   return (

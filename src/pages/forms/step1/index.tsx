@@ -86,6 +86,9 @@ export default function Step1() {
         type: FormAction[name],
         payload: value,
       });
+      const cep = value.replace(/\D/g, '');
+
+      if (cep.length < 7) return; //Impedindo o loading e a consulta da api quando o tatal de caracteres for abaixo do padrão do cep
 
       loading.current.style.display = 'flex'; //Mostrando loading de carregamento do cep
 
@@ -94,39 +97,38 @@ export default function Step1() {
         loading.current.style.display = 'none';
       }, 2000); //2s
 
-      const cep = value.replace(/\D/g, '');
+      try {
+        const result = await api.get(`${cep}/json/`);
+        const { data } = result;
 
-      if (cep.length < 7) return; //Impedindo de consultar a api quando o tatal de caracteres for abaixo do padrão do cep
+        //Verificando se o cep foi encontrado e retornando uma mensagem de erro
+        if (data.erro) {
+          dispatch({
+            type: FormAction.setZip,
+            payload: '',
+          });
+          return toast.error('Cep Invalido');
+        }
 
-      const result = await api.get(`${cep}/json/`);
-
-      const { data } = result;
-
-      //Verificando se o cep foi encontrado e retornando uma mensagem de erro
-      if (data.erro) {
         dispatch({
-          type: FormAction.setZip,
-          payload: '',
+          type: FormAction.setCity,
+          payload: data.localidade,
         });
-        return toast.error('Cep Invalido');
+
+        dispatch({
+          type: FormAction.setStreet,
+          payload: data.logradouro,
+        });
+
+        dispatch({
+          type: FormAction.setState,
+          payload: data.uf,
+        });
+
+        numero.current.focus();
+      } catch (e) {
+        return toast.error('Serviço de CEP indisponível no momento.');
       }
-
-      dispatch({
-        type: FormAction.setCity,
-        payload: data.localidade,
-      });
-
-      dispatch({
-        type: FormAction.setStreet,
-        payload: data.logradouro,
-      });
-
-      dispatch({
-        type: FormAction.setState,
-        payload: data.uf,
-      });
-
-      numero.current.focus();
     }
   }
 
