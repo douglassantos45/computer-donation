@@ -18,7 +18,7 @@ export default function Step2() {
   const history = useRouter();
   const { state, dispatch } = useForm();
   const [serviceList, setServiceList] = useState([...state.devices]);
-  const [renderSelects, setRenderSelects] = useState(state.deviceCount);
+  const [renderSelects, setRenderSelects] = useState(state.devices.length);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -31,6 +31,8 @@ export default function Step2() {
       payload: state.devices.length,
     });
 
+    console.log(state);
+
     dispatch({
       type: FormAction.setCurrentStep,
       payload: 2,
@@ -42,6 +44,7 @@ export default function Step2() {
     setRenderSelects(renderSelects + 1); //Armazenando o total de selects adicionado
 
     setServiceList([...serviceList, { type: '', condition: '' }]);
+    console.log(renderSelects);
   };
 
   //Removendo o campo de select pelo index
@@ -96,8 +99,8 @@ export default function Step2() {
       number: parseInt(state.number),
       complement: state.complement.trim(),
       neighborhood: state.neighborhood.trim(),
-      deviceCount: state.deviceCount,
-      devices: state.devices,
+      deviceCount: renderSelects,
+      devices: serviceList,
     };
 
     setLoading(true);
@@ -108,9 +111,8 @@ export default function Step2() {
 
       if (completed.status === 201) {
         toast.success('Dados enviados com sucesso!!');
-        setLoading(false);
-        return true;
       }
+      return setLoading(false);
     } catch (e) {
       if (e.response.status == 500) {
         return toast.error(responseMessage['500']);
@@ -169,7 +171,7 @@ export default function Step2() {
                 </label>
                 {renderSelects > 1 && (
                   <div
-                    onClick={handleServiceRemove}
+                    onClick={e => handleServiceRemove(index)}
                     className={styles.remove_select}
                   >
                     <FaTrash />
