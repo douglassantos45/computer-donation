@@ -11,11 +11,10 @@
   section {
     margin-bottom: 10px;
   }
-
 }
 
 .input_invalid {
-  border: 1px solid red !important;
+  animation: shake 600ms forwards 2 linear;
  }
 
  .input_invalid_msg {
@@ -57,5 +56,21 @@
         margin-top: 15px;
       }
     }
+  }
+}
+
+
+@keyframes shake {
+  25% {
+    transform: translateX(5px);
+    border: 1.5px solid red;
+  }
+  50% {
+    transform: translateX(-5px);
+    border: 1.5px solid red;
+  }
+  75% {
+    transform: translateX(5px);
+    border: 1.5px solid red;
   }
 }

@@ -34,6 +34,10 @@
     cursor: pointer;
   }
 
+  .input_invalid {
+    animation: shake 600ms;
+   }
+
   .add_device {
     display: flex;
     justify-content: space-between;
@@ -105,4 +109,19 @@
 	100% {
 		transform: rotate(360deg);
 	}
+}
+
+@keyframes shake {
+  25% {
+    transform: translateX(5px);
+    border: 1.5px solid red;
+  }
+  50% {
+    transform: translateX(-5px);
+    border: 1.5px solid red;
+  }
+  75% {
+    transform: translateX(5px);
+    border: 1.5px solid red;
+  }
 }

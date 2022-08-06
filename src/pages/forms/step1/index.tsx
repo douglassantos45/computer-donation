@@ -18,6 +18,7 @@ export default function Step1() {
 
   const [emailError, setEmailError] = useState('');
   const [phoneError, setPhoneError] = useState('');
+  const [inputInvalid, setInputInvalid] = useState(false);
 
   useEffect(() => {
     //Recarrega em qual formulário o usuário está ex: 1/2 ou 2/2
@@ -139,7 +140,9 @@ export default function Step1() {
     if (validation(state) !== false) {
       return history.push('/forms/step2');
     }
+    setInputInvalid(!inputInvalid);
     toast.error('Preencha todos os campos obrigatórios.');
+    setTimeout(() => setInputInvalid(false), 650);
   }
 
   return (
@@ -159,6 +162,7 @@ export default function Step1() {
               Nome completo <span style={{ color: 'red' }}>*</span>
               <input
                 className={
+                  (inputInvalid && state.name === '') ||
                   state.fieldsError?.includes('name')
                     ? styles.input_invalid
                     : ''
@@ -182,7 +186,7 @@ export default function Step1() {
             <label htmlFor="setEmail">
               E-mail
               <input
-                className={emailError && styles.input_invalid}
+                className={emailError ? styles.input_invalid : ''}
                 type="email"
                 placeholder="ex: email@gmail.com"
                 name="setEmail"
@@ -196,7 +200,9 @@ export default function Step1() {
               <span style={{ color: 'red' }}> *</span>
               <input
                 className={
-                  phoneError || state.fieldsError?.includes('phone')
+                  (inputInvalid && state.phone === '') ||
+                  phoneError ||
+                  state.fieldsError?.includes('phone')
                     ? styles.input_invalid
                     : ''
                 }
@@ -232,7 +238,10 @@ export default function Step1() {
                 onBlur={checkCep}
                 placeholder="ex: 44790-000"
                 className={
-                  state.fieldsError?.includes('zip') ? styles.input_invalid : ''
+                  (inputInvalid && state.zip === '') ||
+                  state.fieldsError?.includes('zip')
+                    ? styles.input_invalid
+                    : ''
                 }
               />
               {state.fieldsError?.includes('zip') && (
@@ -248,6 +257,7 @@ export default function Step1() {
                 <span style={{ color: 'red' }}> *</span>
                 <input
                   className={
+                    (inputInvalid && state.streetAddress === '') ||
                     state.fieldsError?.includes('streetAddress')
                       ? styles.input_invalid
                       : ''
@@ -278,6 +288,7 @@ export default function Step1() {
                 <span style={{ color: 'red' }}> *</span>
                 <input
                   className={
+                    (inputInvalid && state.number === '') ||
                     (state.number && parseInt(state.number) < 1) ||
                     state.fieldsError?.includes('number')
                       ? styles.input_invalid
@@ -341,6 +352,7 @@ export default function Step1() {
               <span style={{ color: 'red' }}> *</span>
               <input
                 className={
+                  (inputInvalid && state.neighborhood === '') ||
                   state.fieldsError?.includes('neighborhood')
                     ? styles.input_invalid
                     : ''

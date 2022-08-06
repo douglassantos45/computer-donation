@@ -20,11 +20,12 @@ export default function Step2() {
   const [serviceList, setServiceList] = useState([...state.devices]);
   const [renderSelects, setRenderSelects] = useState(state.devices.length);
   const [loading, setLoading] = useState(false);
+  const [inputInvalid, setInputInvalid] = useState(false);
 
   useEffect(() => {
-    if (validation(state) == false) {
+    /* if (validation(state) == false) {
       history.push('/');
-    }
+    } */
     //Recarregando o total de dispositivo quando o usuário voltar para o formulário 1
     dispatch({
       type: FormAction.setDeviceCount,
@@ -81,7 +82,10 @@ export default function Step2() {
     //Verificando se existe algum select sem está selecionado
     for (let i = 0; i < renderSelects; i++) {
       if (serviceList[i]['type'] === '' || serviceList[i]['condition'] === '') {
-        return toast.error('Selecione todos os campos.');
+        setInputInvalid(!inputInvalid);
+        toast.error('Selecione todos os campos.');
+        setTimeout(() => setInputInvalid(false), 650);
+        return;
       }
     }
 
@@ -149,6 +153,11 @@ export default function Step2() {
                     name="type"
                     value={service.type}
                     onChange={e => handleServiceChange(e, index)}
+                    className={
+                      inputInvalid && state.devices[index].type === ''
+                        ? styles.input_invalid
+                        : ''
+                    }
                   >
                     <option value="">Selecione...</option>
                     {equipments.map(({ name, value }) => (
@@ -165,6 +174,11 @@ export default function Step2() {
                     name="condition"
                     value={service.condition}
                     onChange={e => handleServiceChange(e, index)}
+                    className={
+                      inputInvalid && state.devices[index].condition === ''
+                        ? styles.input_invalid
+                        : ''
+                    }
                   >
                     <option value="">Selecione...</option>
                     {states.map(({ name, value }) => (
