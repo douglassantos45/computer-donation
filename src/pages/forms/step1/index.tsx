@@ -196,7 +196,7 @@ export default function Step1() {
               <span style={{ color: 'red' }}> *</span>
               <input
                 className={
-                  phoneError && state.fieldsError?.includes('phone')
+                  phoneError || state.fieldsError?.includes('phone')
                     ? styles.input_invalid
                     : ''
                 }
@@ -207,7 +207,9 @@ export default function Step1() {
                 value={state.phone}
                 pattern="[0-9]*"
               />
-              <span className={styles.input_invalid_msg}>{phoneError}</span>
+              {state.phone && (
+                <span className={styles.input_invalid_msg}>{phoneError}</span>
+              )}
             </label>
           </div>
         </section>
