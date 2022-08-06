@@ -319,7 +319,7 @@ export default function Step1() {
               <span style={{ color: 'red' }}> *</span>
               <input
                 type="text"
-                placeholder="Digite sua cidade"
+                placeholder="Cidade"
                 name="setCity"
                 onChange={handleChange}
                 value={state.city}
