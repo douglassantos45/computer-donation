@@ -23,9 +23,9 @@ export default function Step2() {
   const [inputInvalid, setInputInvalid] = useState(false);
 
   useEffect(() => {
-    if (validation(state) == false) {
+    /* if (validation(state) == false) {
       history.push('/');
-    }
+    } */
     //Recarregando o total de dispositivo quando o usuário voltar para o formulário 1
     dispatch({
       type: FormAction.setDeviceCount,
@@ -154,7 +154,7 @@ export default function Step2() {
                     value={service.type}
                     onChange={e => handleServiceChange(e, index)}
                     className={
-                      inputInvalid && state.devices[index].type === ''
+                      inputInvalid && service.type === ''
                         ? styles.input_invalid
                         : ''
                     }
@@ -175,7 +175,7 @@ export default function Step2() {
                     value={service.condition}
                     onChange={e => handleServiceChange(e, index)}
                     className={
-                      inputInvalid && state.devices[index].condition === ''
+                      inputInvalid && service.condition === ''
                         ? styles.input_invalid
                         : ''
                     }
