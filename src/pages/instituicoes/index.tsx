@@ -6,8 +6,6 @@ import { RiShareBoxLine } from 'react-icons/ri';
 export default function Institutions() {
   return (
     <div className={styles.container}>
-      <h1>Institições</h1>
-
       <section>
         {institutions.map(company => (
           <div key={company.id} className={styles.company_wrapper}>

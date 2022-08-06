@@ -50,6 +50,10 @@ export const institutions: InstituionsProps[] = [
         url: 'https://facebook.com',
       },
       {
+        name: 'App Masters',
+        url: 'https://www.appmasters.io/',
+      },
+      {
         name: 'Whatsapp',
         url: 'https://wa.me/15551234567',
       },
@@ -72,6 +76,14 @@ export const institutions: InstituionsProps[] = [
         name: 'Facebook',
         url: 'https://facebook.com',
       },
+      {
+        name: 'App Masters',
+        url: 'https://www.appmasters.io/',
+      },
+      {
+        name: 'Whatsapp',
+        url: 'https://wa.me/15551234567',
+      },
     ],
   },
   {
@@ -91,6 +103,14 @@ export const institutions: InstituionsProps[] = [
         name: 'Facebook',
         url: 'https://facebook.com',
       },
+      {
+        name: 'App Masters',
+        url: 'https://www.appmasters.io/',
+      },
+      {
+        name: 'Whatsapp',
+        url: 'https://wa.me/15551234567',
+      },
     ],
   },
   {
@@ -107,6 +127,14 @@ export const institutions: InstituionsProps[] = [
       {
         name: 'Facebook',
         url: 'https://facebook.com',
+      },
+      {
+        name: 'App Masters',
+        url: 'https://www.appmasters.io/',
+      },
+      {
+        name: 'Whatsapp',
+        url: 'https://wa.me/15551234567',
       },
     ],
   },

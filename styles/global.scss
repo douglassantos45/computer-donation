@@ -76,6 +76,12 @@ button {
   &:hover {
     filter: brightness(0.9);
   }
+
+  &:disabled {
+    background-color: #c1c1c1;
+    pointer-events: all;
+    cursor: not-allowed;
+  }
 }
 
 .current-step {

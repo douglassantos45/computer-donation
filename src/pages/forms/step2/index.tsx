@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { useForm, FormAction } from '../../../contexts/FormContext';
 import toast from 'react-hot-toast';
-import validation from '../../../utils/Validation';
+import { validation, messageError } from '../../../utils/Validation';
 import { FaTrash } from 'react-icons/fa';
 import { FiPlus } from 'react-icons/fi';
 import { api } from '../../../services/api-donation';
@@ -22,16 +22,14 @@ export default function Step2() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    /* if (validation(state) == false) {
+    if (validation(state) == false) {
       history.push('/');
-    } */
+    }
     //Recarregando o total de dispositivo quando o usuário voltar para o formulário 1
     dispatch({
       type: FormAction.setDeviceCount,
       payload: state.devices.length,
     });
-
-    console.log(state);
 
     dispatch({
       type: FormAction.setCurrentStep,
@@ -42,16 +40,14 @@ export default function Step2() {
   //Função para adicionar select de forma dinâmica quando clica no botão de add
   const handleServiceAdd = () => {
     setRenderSelects(renderSelects + 1); //Armazenando o total de selects adicionado
-
-    setServiceList([...serviceList, { type: '', condition: '' }]);
-    console.log(renderSelects);
+    setServiceList([...serviceList, { type: '', condition: '' }]); //Criando novo campo select
   };
 
   //Removendo o campo de select pelo index
   const handleServiceRemove = index => {
-    const list = [...serviceList];
+    const list = [...serviceList]; //Copiando os dados do state para uma constante
     list.splice(index, 1);
-    setServiceList(list);
+    setServiceList(list); //Atualizando o state para a versão com uma remoção.
 
     setRenderSelects(renderSelects - 1);
   };
@@ -59,9 +55,10 @@ export default function Step2() {
   //Adicionado na lista de devices todos os dados que foram selecionados nos campos dos selects
   const handleServiceChange = (e: ChangeEvent<HTMLSelectElement>, index) => {
     const { name, value } = e.target;
-    const list = [...serviceList];
+    console.log(value);
+    const list = [...serviceList]; //Realizando uma cópia do state anterior
 
-    list[index][name] = value;
+    list[index][name] = value; //Alterando os valores dos selects pelo index do select selecionado
     setServiceList(list);
   };
 
@@ -84,20 +81,21 @@ export default function Step2() {
     //Verificando se existe algum select sem está selecionado
     for (let i = 0; i < renderSelects; i++) {
       if (serviceList[i]['type'] === '' || serviceList[i]['condition'] === '') {
-        return toast.error('Alguns campos não foram selecionados');
+        return toast.error('Selecione todos os campos.');
       }
     }
 
-    const response = {
+    const request = {
       name: state.name.trim(),
-      email: state.email.trim(),
+      email: state.email.trim() === '' ? undefined : state.email.trim(),
       phone: state.phone.trim(),
       zip: state.zip,
       city: state.city.trim(),
       state: state.state.trim(),
       streetAddress: state.streetAddress.trim(),
       number: parseInt(state.number),
-      complement: state.complement.trim(),
+      complement:
+        state.complement.trim() === '' ? undefined : state.complement.trim(),
       neighborhood: state.neighborhood.trim(),
       deviceCount: renderSelects,
       devices: serviceList,
@@ -105,19 +103,26 @@ export default function Step2() {
 
     setLoading(true);
 
-    console.log(response);
     try {
-      const completed = await api.post('/donation', response);
+      const completed = await api.post('/donation', request);
 
-      if (completed.status === 201) {
-        toast.success('Dados enviados com sucesso!!');
+      if (completed.status === 200) {
+        toast.success('Seus dados foram enviados com sucesso!');
+        return setLoading(false);
       }
-      return setLoading(false);
     } catch (e) {
+      const { data } = e.response;
+      const message = messageError(data.requiredFields);
+
+      dispatch({
+        type: FormAction.setFieldsError,
+        payload: data.requiredFields,
+      });
+
       if (e.response.status == 500) {
         return toast.error(responseMessage['500']);
       }
-      toast.error(e.response.data.errorMessage);
+      toast.error(message);
       return setLoading(false);
     }
   };
@@ -134,10 +139,10 @@ export default function Step2() {
         </div>
       </div>
       <form action="" className="form-group">
-        <div>
+        <div className={styles.wrapper}>
           {renderSelects > 0 &&
             serviceList.map((service, index) => (
-              <div key={index} className={`input-group ${styles.hr}`}>
+              <div key={index} className={`input-group ${styles.wrapper}`}>
                 <label htmlFor="type">
                   Equipamentos
                   <select
@@ -145,7 +150,7 @@ export default function Step2() {
                     value={service.type}
                     onChange={e => handleServiceChange(e, index)}
                   >
-                    <option>Selecione...</option>
+                    <option value="">Selecione...</option>
                     {equipments.map(({ name, value }) => (
                       <option value={value} key={value}>
                         {name}
@@ -161,7 +166,7 @@ export default function Step2() {
                     value={service.condition}
                     onChange={e => handleServiceChange(e, index)}
                   >
-                    <option value="">Selecione</option>
+                    <option value="">Selecione...</option>
                     {states.map(({ name, value }) => (
                       <option value={value} key={value}>
                         {name}
@@ -188,7 +193,11 @@ export default function Step2() {
           <span>Voltar</span>
         </div>
         <div>
-          <button className={styles.submit} onClick={handleSubmit}>
+          <button
+            className={styles.submit}
+            onClick={handleSubmit}
+            disabled={loading}
+          >
             {loading ? <ImSpinner8 /> : 'Concluir'}
           </button>
         </div>

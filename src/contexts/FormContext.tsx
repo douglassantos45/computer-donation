@@ -18,6 +18,7 @@ type StateProps = {
   neighborhood: string;
   deviceCount: number;
   devices: { type: string; condition: string }[];
+  fieldsError: string[];
 };
 
 type ActionProps = {
@@ -44,6 +45,7 @@ const initialData: StateProps = {
   neighborhood: '',
   deviceCount: 1,
   devices: [{ type: '', condition: '' }],
+  fieldsError: [],
 };
 
 //Context
@@ -64,6 +66,7 @@ export enum FormAction {
   setNeighborhood,
   setDeviceCount,
   setDevices,
+  setFieldsError,
 }
 //Recebe dados e ações
 const formReducer = (state: StateProps, action: ActionProps) => {
@@ -98,6 +101,9 @@ const formReducer = (state: StateProps, action: ActionProps) => {
       return { ...state, deviceCount: parseInt(action.payload) };
     case FormAction.setDevices:
       return { ...state, devices: action.payload };
+
+    case FormAction.setFieldsError:
+      return { ...state, fieldsError: action.payload };
 
     default:
       return state;

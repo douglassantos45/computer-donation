@@ -14,21 +14,8 @@
     font-size: 20px;
   }
 
-  .hr {
-    display: flex;
-    align-items: center;
-    position: relative;
-    &:not(:last-child)::after {
-      content: '';
-      background-color: #e3e3e3;
-      height: 1px;
-      width: 100%;
-      position: absolute;
-      bottom: 0;
-    }
-
-    padding-bottom: 20px;
-    
+  .wrapper:not(:first-child) {
+    margin-top: 20px;
   }
 
   .remove_select {
@@ -40,7 +27,7 @@
     justify-content: center;
     border-radius: 5px;
     height: 100%;
-    margin-top: 34px;
+    margin-top: 45px;
 
     font-size: 13px;
 
