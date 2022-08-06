@@ -128,7 +128,8 @@
     bottom: 2rem;
     background-color: var(--white-color) !important;
     box-shadow: 2px 8px 24px var(--box-shadow);
-    width: 260px;
+    
+    width: clamp(205px, 60%, 65%);
     height: 100vh;
     right: 0;
     bottom: 0;
