@@ -56,8 +56,6 @@ input, select {
     background-color: #e3e3e3;
     border: 0;
   }
-
-  
 }
 
 input {
@@ -153,7 +151,7 @@ hr {
   }
 
   label {
-    margin-top: 10px;
+    margin-top: 5px;
   }
 
   .sm {
@@ -165,7 +163,7 @@ hr {
   }
 
   &:not(:last-child) {
-    margin-bottom: 8px;
+    margin-bottom: 5px;
   }
 }
 
@@ -246,20 +244,5 @@ hr {
         margin-bottom: 15px;
       }
     }
-  }
-}
-
-@keyframes shake {
-  25% {
-    transform: translateX(4px);
-    border: 1px solid red;
-  }
-  50% {
-    transform: translateX(-4px);
-    border: 1px solid red;
-  }
-  75% {
-    transform: translateX(4px);
-    border: 1px solid red;
   }
 }

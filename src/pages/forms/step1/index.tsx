@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useForm, FormAction } from '../../../contexts/FormContext';
 import { api } from '../../../services/api-cep';
@@ -66,7 +66,6 @@ export default function Step1() {
           type: FormAction.setPhone,
           payload: phone,
         });
-
         return;
       }
     }
@@ -134,21 +133,21 @@ export default function Step1() {
   }
 
   function addBorderInputInvalid() {
-    const fields = [];
+    const fieldsEmpty = [];
+    //Verificando quais campos estão vazios e preenchendo um array para popular o contexto
     Object.keys(state).forEach(key => {
       if (state[key] === '' && key !== 'email' && key !== 'complement') {
-        fields.push(key);
+        fieldsEmpty.push(key);
       }
     });
     dispatch({
       type: FormAction.setFieldsError,
-      payload: fields,
+      payload: fieldsEmpty,
     });
-    console.log(state.fieldsError);
   }
 
   //Validando alguns dados e passando para a próxima etapa do formulário
-  function handleNextForm(e) {
+  function handleNextForm(e: MouseEvent) {
     e.preventDefault();
 
     if (validation(state) !== false) {
