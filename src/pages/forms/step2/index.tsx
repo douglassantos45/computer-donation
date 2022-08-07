@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { useForm, FormAction } from '../../../contexts/FormContext';
@@ -23,9 +22,9 @@ export default function Step2() {
   const [inputInvalid, setInputInvalid] = useState(false);
 
   useEffect(() => {
-    /* if (validation(state) == false) {
+    if (validation(state) == false) {
       history.push('/');
-    } */
+    }
     //Recarregando o total de dispositivo quando o usuário voltar para o formulário 1
     dispatch({
       type: FormAction.setDeviceCount,

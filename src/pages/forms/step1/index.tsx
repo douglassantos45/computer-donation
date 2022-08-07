@@ -147,7 +147,7 @@ export default function Step1() {
   }
 
   //Validando alguns dados e passando para a próxima etapa do formulário
-  function handleNextForm(e: MouseEvent) {
+  function handleNextForm(e: MouseEvent<HTMLElement>) {
     e.preventDefault();
 
     if (validation(state) !== false) {
