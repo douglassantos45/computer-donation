@@ -22,8 +22,6 @@ export default function Step1() {
 
   useEffect(() => {
     //Recarrega em qual formulário o usuário está ex: 1/2 ou 2/2
-    validateEmail(state.email);
-    state.fieldsError?.includes('phone') && validatePhone(state.phone);
 
     dispatch({
       type: FormAction.setCurrentStep,
@@ -132,6 +130,20 @@ export default function Step1() {
     }
   }
 
+  function addBorderInputInvalid() {
+    const fields = [];
+    Object.keys(state).forEach(key => {
+      if (state[key] === '' && key !== 'email' && key !== 'complement') {
+        fields.push(key);
+      }
+    });
+    dispatch({
+      type: FormAction.setFieldsError,
+      payload: fields,
+    });
+    console.log(state.fieldsError);
+  }
+
   //Validando alguns dados e passando para a próxima etapa do formulário
   function handleNextForm(e) {
     e.preventDefault();
@@ -140,9 +152,12 @@ export default function Step1() {
       return history.push('/forms/step2');
     }
 
+    state.phone === '' ? validatePhone(state.phone) : '';
+
     setInputInvalid(!inputInvalid);
     toast.error('Preencha todos os campos obrigatórios.');
     setTimeout(() => setInputInvalid(false), 1300);
+    return addBorderInputInvalid();
   }
 
   return (
@@ -172,7 +187,7 @@ export default function Step1() {
                 pattern="[a-z A-Z]*"
                 required={state.fieldsError?.includes('name')}
               />
-              {state.fieldsError?.includes('name') && (
+              {state.name === '' && state.fieldsError?.includes('name') && (
                 <span className={styles.input_invalid_msg}>
                   Informe um nome válido
                 </span>
@@ -199,7 +214,7 @@ export default function Step1() {
               Telefone
               <span style={{ color: 'red' }}> *</span>
               <input
-                className={inputInvalid ? styles.input_invalid : ''}
+                className={phoneError ? styles.input_invalid : ''}
                 style={phoneError ? { border: '1px solid red' } : {}}
                 type="tel"
                 placeholder="ex: 55749003452"
@@ -242,7 +257,7 @@ export default function Step1() {
                 }
                 required={state.fieldsError?.includes('zip')}
               />
-              {state.fieldsError?.includes('zip') && (
+              {state.zip === '' && state.fieldsError?.includes('zip') && (
                 <span className={styles.input_invalid_msg}>
                   Digite um CEP válido
                 </span>
@@ -266,11 +281,12 @@ export default function Step1() {
                   value={state.streetAddress}
                   required={state.fieldsError?.includes('streetAddress')}
                 />
-                {state.fieldsError?.includes('streetAddress') && (
-                  <span className={styles.input_invalid_msg}>
-                    Informe um valor válido.
-                  </span>
-                )}
+                {state.streetAddress === '' &&
+                  state.fieldsError?.includes('streetAddress') && (
+                    <span className={styles.input_invalid_msg}>
+                      Informe um valor válido.
+                    </span>
+                  )}
               </label>
 
               <label htmlFor="setState" className="sm">
@@ -305,7 +321,8 @@ export default function Step1() {
                   required={state.fieldsError?.includes('number')}
                 />
                 {((state.number && parseInt(state.number) < 1) ||
-                  state.fieldsError?.includes('number')) && (
+                  (state.number === '' &&
+                    state.fieldsError?.includes('number'))) && (
                   <span className={styles.input_invalid_msg}>
                     O número deve ser maior que 0
                   </span>
@@ -342,6 +359,12 @@ export default function Step1() {
                 name="setComplement"
                 onChange={handleChange}
                 value={state.complement}
+                style={
+                  (state.complement !== '' && state.complement.length < 2) ||
+                  state.fieldsError?.includes('complement')
+                    ? { border: '1px solid red' }
+                    : {}
+                }
               />
               {state.complement && state.complement.length < 2 && (
                 <span className={styles.input_invalid_msg}>
@@ -366,11 +389,12 @@ export default function Step1() {
                 value={state.neighborhood}
                 required={state.fieldsError?.includes('neighborhood')}
               />
-              {state.fieldsError?.includes('neighborhood') && (
-                <span className={styles.input_invalid_msg}>
-                  Informe um valor válido.
-                </span>
-              )}
+              {state.neighborhood === '' &&
+                state.fieldsError?.includes('neighborhood') && (
+                  <span className={styles.input_invalid_msg}>
+                    Informe um valor válido.
+                  </span>
+                )}
             </label>
           </div>
         </section>

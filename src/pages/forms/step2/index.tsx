@@ -116,8 +116,7 @@ export default function Step2() {
       }
     } catch (e) {
       const { data } = e.response;
-      console.log(request);
-      console.log(data);
+
       const message = messageError(data.requiredFields);
 
       dispatch({
