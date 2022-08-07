@@ -18,7 +18,7 @@ export const institutions: InstituionsProps[] = [
     social: [
       {
         name: 'Instagram',
-        url: 'https://instagram.com',
+        url: 'https://www.instagram.com/appmasters.io/',
       },
       {
         name: 'Facebook',
