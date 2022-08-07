@@ -56,7 +56,6 @@ export default function Step2() {
   //Adicionado na lista de devices todos os dados que foram selecionados nos campos dos selects
   const handleServiceChange = (e: ChangeEvent<HTMLSelectElement>, index) => {
     const { name, value } = e.target;
-    console.log(value);
     const list = [...serviceList]; //Realizando uma cópia do state anterior
 
     list[index][name] = value; //Alterando os valores dos selects pelo index do select selecionado
@@ -91,7 +90,7 @@ export default function Step2() {
 
     const request = {
       name: state.name.trim(),
-      email: state.email.trim() === '' ? undefined : state.email.trim(),
+      email: state.email.trim() === '' ? null : state.email.trim(),
       phone: state.phone.trim(),
       zip: state.zip,
       city: state.city.trim(),
@@ -99,7 +98,7 @@ export default function Step2() {
       streetAddress: state.streetAddress.trim(),
       number: parseInt(state.number),
       complement:
-        state.complement.trim() === '' ? undefined : state.complement.trim(),
+        state.complement.trim() === '' ? null : state.complement.trim(),
       neighborhood: state.neighborhood.trim(),
       deviceCount: renderSelects,
       devices: serviceList,
@@ -111,11 +110,14 @@ export default function Step2() {
       const completed = await api.post('/donation', request);
 
       if (completed.status === 200) {
+        console.log(completed);
         toast.success('Seus dados foram enviados com sucesso!');
         return setLoading(false);
       }
     } catch (e) {
       const { data } = e.response;
+      console.log(request);
+      console.log(data);
       const message = messageError(data.requiredFields);
 
       dispatch({
@@ -159,7 +161,9 @@ export default function Step2() {
                         : ''
                     }
                   >
-                    <option value="">Selecione...</option>
+                    <option value="" disabled>
+                      Selecione o equipamento
+                    </option>
                     {equipments.map(({ name, value }) => (
                       <option value={value} key={value}>
                         {name}
@@ -180,7 +184,9 @@ export default function Step2() {
                         : ''
                     }
                   >
-                    <option value="">Selecione...</option>
+                    <option value="" disabled>
+                      Selecione a condição
+                    </option>
                     {states.map(({ name, value }) => (
                       <option value={value} key={value}>
                         {name}

@@ -36,7 +36,7 @@ input, select {
   border-radius: 8px;
   color: #000;
   outline: 0;
-  font-size: 15px;
+  font-size: 1.5rem;
   box-shadow: 1px 4px 15px -1px rgba(0,0,0,0.1);
 
   transition: border 0.3s ease;
@@ -44,7 +44,7 @@ input, select {
   background-color: #fff;
 
   &:invalid {
-    border: 1px solid #ff335f!important;
+    border: 1px solid red!important;
   }
 
   &:focus {
@@ -52,9 +52,23 @@ input, select {
   }
 
   &:disabled {
-    color: #7c7c7c;
+    color: #444444;
     background-color: #e3e3e3;
+    border: 0;
   }
+
+  
+}
+
+input {
+  &::placeholder {
+    font-size: 13px;
+  }
+}
+
+select {
+  color: var(--text-color);
+  font-size: 1.4rem;
 }
 
 .input-border-red {
@@ -89,12 +103,12 @@ button {
 }
 
 .current-step {
-  font-size: 13px;
+  font-size: 1.3rem;
   color: #b8b8d4;
 }
 
 label {
-  font-size: 13px;
+  font-size: 1.3rem;
   width: 100%;
   font-weight: 500;
 }
@@ -171,7 +185,7 @@ hr {
 }
 
 .btn-prev span {
-  font-size: 13px;
+  font-size: 1.3rem;
   color: #333;
   cursor: pointer;
 }
@@ -190,23 +204,29 @@ hr {
   div:nth-child(2) {
     color: #c1c1c1;
     padding: 0 1.35rem;
-    font-size: 13px;
+    font-size: 1.3rem;
     line-height: 0;
   }
 }
 
 ::-webkit-scrollbar {
-  width: 1rem;
+  width: 0.7rem;
   border-radius: .5rem;
   background-color: hsl(228, 8%, 76%);
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: hsl(228, 8%, 64%);
-  border-radius: .6rem;
+  border-radius: 6px;
 
   &:hover {
     background-color:#07b16c;
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    font-size: 65%;
   }
 }
 

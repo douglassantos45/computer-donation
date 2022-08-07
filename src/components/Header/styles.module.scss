@@ -2,6 +2,7 @@
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 1111;
   width: 100%;
   background-color: #fff;
 
@@ -37,7 +38,7 @@
     a {
       color: var(--text-color);
       transition: color 0.3s ease;
-      font-size: 15px;
+      font-size: 1.5rem;
 
       position: relative;
 
@@ -69,10 +70,10 @@
     
     font-weight: 700;
     transition: 0.3s;
-    font-size: 20px;
+
 
     h1 {
-      font-size: 20px;
+      font-size: 2.1rem;
     }
 
     span {
@@ -145,7 +146,7 @@
     .nav_logo {
       display: block !important;
       h1 {
-        font-size: 20px;
+        font-size: 2rem;
       }
     }
 
@@ -161,7 +162,7 @@
       margin-top: 40px;
 
       a {
-        font-size: 18px;
+        font-size: 1.6rem;
         &.active_link::after {
           bottom: -8px;
         }

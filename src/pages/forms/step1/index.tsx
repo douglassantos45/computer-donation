@@ -23,7 +23,7 @@ export default function Step1() {
   useEffect(() => {
     //Recarrega em qual formulário o usuário está ex: 1/2 ou 2/2
     validateEmail(state.email);
-    state.phone && validatePhone(state.phone);
+    state.fieldsError?.includes('phone') && validatePhone(state.phone);
 
     dispatch({
       type: FormAction.setCurrentStep,
@@ -57,24 +57,22 @@ export default function Step1() {
       validateEmail(value);
     } else if (name === 'setPhone') {
       //Removendo caracteres do telefone
-      const phone = value
-        .replaceAll('(', '')
-        .replaceAll(')', '')
-        .replaceAll('-', '')
-        .replaceAll('.', '')
-        .replaceAll(/[a-z A-Z]+/g, ' ')
-        .trim();
-      dispatch({
-        type: FormAction.setPhone,
-        payload: phone,
-      });
+      const phone = value.replaceAll(/[a-z A-Z-+=~,;´`'().\[\]]+/g, '').trim();
 
-      validatePhone(phone); //Verificando se o telefone é válido 'pt-BR'
+      //Verificando se o telefone é válido 'pt-BR'
+      if (validatePhone(phone)) {
+        dispatch({
+          type: FormAction.setPhone,
+          payload: phone,
+        });
+
+        return;
+      }
     }
 
     dispatch({
-      type: FormAction[e.target.name],
-      payload: e.target.value,
+      type: FormAction[name],
+      payload: value,
     });
   }
 
@@ -137,12 +135,14 @@ export default function Step1() {
   //Validando alguns dados e passando para a próxima etapa do formulário
   function handleNextForm(e) {
     e.preventDefault();
+
     if (validation(state) !== false) {
       return history.push('/forms/step2');
     }
+
     setInputInvalid(!inputInvalid);
     toast.error('Preencha todos os campos obrigatórios.');
-    setTimeout(() => setInputInvalid(false), 650);
+    setTimeout(() => setInputInvalid(false), 1300);
   }
 
   return (
@@ -162,10 +162,7 @@ export default function Step1() {
               Nome completo <span style={{ color: 'red' }}>*</span>
               <input
                 className={
-                  (inputInvalid && state.name === '') ||
-                  state.fieldsError?.includes('name')
-                    ? styles.input_invalid
-                    : ''
+                  inputInvalid && state.name === '' ? styles.input_invalid : ''
                 }
                 type="text"
                 placeholder="Digite seu nome"
@@ -173,6 +170,7 @@ export default function Step1() {
                 onChange={handleChange}
                 value={state.name}
                 pattern="[a-z A-Z]*"
+                required={state.fieldsError?.includes('name')}
               />
               {state.fieldsError?.includes('name') && (
                 <span className={styles.input_invalid_msg}>
@@ -193,28 +191,30 @@ export default function Step1() {
                 onChange={handleChange}
                 value={state.email}
               />
-              <span className={styles.input_invalid_msg}>{emailError}</span>
+              {(emailError || state.fieldsError?.includes('email')) && (
+                <span className={styles.input_invalid_msg}>{emailError}</span>
+              )}
             </label>
             <label htmlFor="setPhone">
               Telefone
               <span style={{ color: 'red' }}> *</span>
               <input
-                className={
-                  (inputInvalid && state.phone === '') ||
-                  phoneError ||
-                  state.fieldsError?.includes('phone')
-                    ? styles.input_invalid
-                    : ''
-                }
-                type="text"
+                className={inputInvalid ? styles.input_invalid : ''}
+                style={phoneError ? { border: '1px solid red' } : {}}
+                type="tel"
                 placeholder="ex: 55749003452"
                 name="setPhone"
                 onChange={handleChange}
                 value={state.phone}
                 pattern="[0-9]*"
+                required={state.fieldsError?.includes('phone')}
               />
-              {state.phone && (
-                <span className={styles.input_invalid_msg}>{phoneError}</span>
+              {(phoneError || state.fieldsError?.includes('phone')) && (
+                <span className={styles.input_invalid_msg}>
+                  {state.phone === ''
+                    ? 'Digite o número do telefone'
+                    : phoneError}
+                </span>
               )}
             </label>
           </div>
@@ -238,11 +238,9 @@ export default function Step1() {
                 onBlur={checkCep}
                 placeholder="ex: 44790-000"
                 className={
-                  (inputInvalid && state.zip === '') ||
-                  state.fieldsError?.includes('zip')
-                    ? styles.input_invalid
-                    : ''
+                  inputInvalid && state.zip === '' ? styles.input_invalid : ''
                 }
+                required={state.fieldsError?.includes('zip')}
               />
               {state.fieldsError?.includes('zip') && (
                 <span className={styles.input_invalid_msg}>
@@ -257,8 +255,7 @@ export default function Step1() {
                 <span style={{ color: 'red' }}> *</span>
                 <input
                   className={
-                    (inputInvalid && state.streetAddress === '') ||
-                    state.fieldsError?.includes('streetAddress')
+                    inputInvalid && state.streetAddress === ''
                       ? styles.input_invalid
                       : ''
                   }
@@ -267,7 +264,13 @@ export default function Step1() {
                   name="setStreet"
                   onChange={handleChange}
                   value={state.streetAddress}
+                  required={state.fieldsError?.includes('streetAddress')}
                 />
+                {state.fieldsError?.includes('streetAddress') && (
+                  <span className={styles.input_invalid_msg}>
+                    Informe um valor válido.
+                  </span>
+                )}
               </label>
 
               <label htmlFor="setState" className="sm">
@@ -279,7 +282,6 @@ export default function Step1() {
                   name="setState"
                   onChange={handleChange}
                   value={state.state}
-                  pattern="[a-z A-Z]*"
                   disabled
                 />
               </label>
@@ -289,8 +291,7 @@ export default function Step1() {
                 <input
                   className={
                     (inputInvalid && state.number === '') ||
-                    (state.number && parseInt(state.number) < 1) ||
-                    state.fieldsError?.includes('number')
+                    (state.number && parseInt(state.number) < 1)
                       ? styles.input_invalid
                       : ''
                   }
@@ -300,9 +301,11 @@ export default function Step1() {
                   onChange={handleChange}
                   value={state.number}
                   ref={numero}
-                  pattern="[0-9]*"
+                  pattern="[1-9]*"
+                  required={state.fieldsError?.includes('number')}
                 />
-                {state.number && parseInt(state.number) < 1 && (
+                {((state.number && parseInt(state.number) < 1) ||
+                  state.fieldsError?.includes('number')) && (
                   <span className={styles.input_invalid_msg}>
                     O número deve ser maior que 0
                   </span>
@@ -352,8 +355,7 @@ export default function Step1() {
               <span style={{ color: 'red' }}> *</span>
               <input
                 className={
-                  (inputInvalid && state.neighborhood === '') ||
-                  state.fieldsError?.includes('neighborhood')
+                  inputInvalid && state.neighborhood === ''
                     ? styles.input_invalid
                     : ''
                 }
@@ -362,7 +364,13 @@ export default function Step1() {
                 name="setNeighborhood"
                 onChange={handleChange}
                 value={state.neighborhood}
+                required={state.fieldsError?.includes('neighborhood')}
               />
+              {state.fieldsError?.includes('neighborhood') && (
+                <span className={styles.input_invalid_msg}>
+                  Informe um valor válido.
+                </span>
+              )}
             </label>
           </div>
         </section>
