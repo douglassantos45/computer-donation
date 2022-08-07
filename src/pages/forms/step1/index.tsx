@@ -23,6 +23,9 @@ export default function Step1() {
   useEffect(() => {
     //Recarrega em qual formulário o usuário está ex: 1/2 ou 2/2
 
+    state.phone !== '' ? validatePhone(state.phone) : '';
+    validateEmail(state.email);
+
     dispatch({
       type: FormAction.setCurrentStep,
       payload: 1,
@@ -156,7 +159,7 @@ export default function Step1() {
 
     setInputInvalid(!inputInvalid);
     toast.error('Preencha todos os campos obrigatórios.');
-    setTimeout(() => setInputInvalid(false), 1300);
+    setTimeout(() => setInputInvalid(false), 1000);
     return addBorderInputInvalid();
   }
 
@@ -214,7 +217,9 @@ export default function Step1() {
               Telefone
               <span style={{ color: 'red' }}> *</span>
               <input
-                className={phoneError ? styles.input_invalid : ''}
+                className={
+                  phoneError && inputInvalid ? styles.input_invalid : ''
+                }
                 style={phoneError ? { border: '1px solid red' } : {}}
                 type="tel"
                 placeholder="ex: 55749003452"

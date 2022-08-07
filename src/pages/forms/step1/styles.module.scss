@@ -14,7 +14,7 @@
 }
 
 .input_invalid {
-  animation: shake 600ms forwards 2 linear;
+  animation: shake 500ms forwards 2 linear;
  }
 
  .input_invalid_msg {
@@ -63,15 +63,15 @@
 
 @keyframes shake {
   25% {
-    transform: translateX(5px);
+    transform: translateX(4px);
     border: 1.5px solid red;
   }
   50% {
-    transform: translateX(-5px);
+    transform: translateX(-4px);
     border: 1.5px solid red;
   }
   75% {
-    transform: translateX(5px);
+    transform: translateX(4px);
     border: 1.5px solid red;
   }
 }

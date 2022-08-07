@@ -113,15 +113,15 @@
 
 @keyframes shake {
   25% {
-    transform: translateX(5px);
-    border: 1.5px solid red;
+    transform: translateX(4px);
+    border: 1px solid red;
   }
   50% {
-    transform: translateX(-5px);
-    border: 1.5px solid red;
+    transform: translateX(-4px);
+    border: 1px solid red;
   }
   75% {
-    transform: translateX(5px);
-    border: 1.5px solid red;
+    transform: translateX(4px);
+    border: 1px solid red;
   }
 }

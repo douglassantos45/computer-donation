@@ -110,15 +110,14 @@ export default function Step2() {
       const completed = await api.post('/donation', request);
 
       if (completed.status === 200) {
-        console.log(completed);
         toast.success('Seus dados foram enviados com sucesso!');
         return setLoading(false);
       }
     } catch (e) {
       const { data } = e.response;
-
       const message = messageError(data.requiredFields);
 
+      //Colocando os dados do requiredFields no meu contexto
       dispatch({
         type: FormAction.setFieldsError,
         payload: data.requiredFields,
